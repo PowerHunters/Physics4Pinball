@@ -295,11 +295,13 @@ update_status ModuleSceneIntro::Update()
 		circles.add(App->physics->CreateCircle(486+ SCREEN_WIDTH / 2 - pinball_rect.w / 2, 890, 15));
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	//ball in start
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		// Pivot 0, 0
-		
+		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 50, 100));
+		circles.add(App->physics->CreateCircle( SCREEN_WIDTH / 2 + 100, 100, 15));
 	}
+
 	
 	// TODO 5: Draw all the circles using "circle" texture
 	// Draw all circles

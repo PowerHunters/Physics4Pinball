@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	pinball = App->textures->Load("pinball/Pinball.png"); 
-	ball = App->textures->Load("pinball/Ball.png");
+	ball = App->textures->Load("pinball/ball.png");
 	/*box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");*/
 
@@ -231,14 +231,14 @@ update_status ModuleSceneIntro::Update()
 	//ball in mouse position
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 15));
 	}
 
 	//ball in start
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 50, 100));
-		circles.add(App->physics->CreateCircle(426, 904, 25));
+		circles.add(App->physics->CreateCircle(486+ SCREEN_WIDTH / 2 - pinball_rect.w / 2, 890, 15));
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
@@ -255,7 +255,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(ball, x-10, y-10, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

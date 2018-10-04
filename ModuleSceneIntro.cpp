@@ -34,9 +34,9 @@ bool ModuleSceneIntro::Start()
 	/*box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");*/
 
-	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
-	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
-	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27));
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27));
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27));
 
 	int BigStruct[52] = {
 		98, 402,
@@ -289,21 +289,21 @@ update_status ModuleSceneIntro::Update()
 	//ball in mouse position
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 15));
+		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 15));
 	}
 
 	//ball in start
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 50, 100));
-		circles.add(App->physics->CreateCircle(486+ SCREEN_WIDTH / 2 - pinball_rect.w / 2, 890, 15));
+		balls.add(App->physics->CreateCircle(486+ SCREEN_WIDTH / 2 - pinball_rect.w / 2, 890, 15));
 	}
 
 	//ball in start
 	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
 		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 50, 100));
-		circles.add(App->physics->CreateCircle( SCREEN_WIDTH / 2 + 100, 100, 15));
+		balls.add(App->physics->CreateCircle( SCREEN_WIDTH / 2 + 100, 100, 15));
 	}
 
 	

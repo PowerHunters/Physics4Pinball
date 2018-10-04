@@ -34,6 +34,10 @@ bool ModuleSceneIntro::Start()
 	/*box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");*/
 
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
+	circles.add(App->physics->CreateFixCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 15));
+
 	int BigStruct[52] = {
 		98, 402,
 		102, 397,
@@ -240,7 +244,7 @@ update_status ModuleSceneIntro::Update()
 	
 	// TODO 5: Draw all the circles using "circle" texture
 	// Draw all circles
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	p2List_item<PhysBody*>* c = balls.getFirst();
 
 	while(c != NULL)
 	{

@@ -16,6 +16,7 @@ public:
 	bool CleanUp();
 
 public:
+	p2List<PhysBody*> balls;
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> fixures;
 	//p2List<PhysBody*> boxes;

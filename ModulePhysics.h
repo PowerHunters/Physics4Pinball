@@ -41,6 +41,7 @@ public:
 
 	// TODO 4: Move body creation to 3 functions to create circles, rectangles and chains
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateFixCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateFixChain(int x, int y, int* points, int size);

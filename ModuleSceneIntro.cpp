@@ -34,6 +34,44 @@ bool ModuleSceneIntro::Start()
 	/*box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");*/
 
+	int BigStruct[64] = {
+		-61, 228,
+		-64, 232,
+		-106, 230,
+		-178, 292,
+		-157, 380,
+		-156, 388,
+		-156, 396,
+		-160, 401,
+		-167, 402,
+		-174, 399,
+		-181, 392,
+		-186, 384,
+		-192, 371,
+		-196, 360,
+		-199, 347,
+		-201, 334,
+		-204, 312,
+		-205, 292,
+		-204, 274,
+		-201, 256,
+		-193, 232,
+		-180, 208,
+		-168, 192,
+		-158, 180,
+		-153, 177,
+		-146, 177,
+		-130, 185,
+		-65, 211,
+		-61, 214,
+		-60, 218,
+		-60, 225,
+		473, -107
+	};
+
+	fixures.add(App->physics->CreateFixChain(962, 4, BigStruct, 64));
+
+
 	int Pinball[258] = {
 		181, 113,
 		189, 115,
@@ -166,7 +204,10 @@ bool ModuleSceneIntro::Start()
 		174, 115
 	};
 
-	fixures.add(App->physics->CreateFixChain(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, Pinball, 258));
+	fixures.add(App->physics->CreateFixChain(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, Pinball, 258));
+
+
+
 
 	return ret;
 }

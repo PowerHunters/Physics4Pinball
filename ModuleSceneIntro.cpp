@@ -275,6 +275,7 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 	App->textures->Unload(pinball);
+	App->textures->Unload(ball);
 	return true;
 }
 

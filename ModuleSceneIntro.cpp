@@ -11,6 +11,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	//inicialize textures to NULL
 	ball = NULL;
 	pinball = NULL;
+	
+	pinball_rect.x = 0;
+	pinball_rect.y = 0;
+	pinball_rect.w = 518;
+	pinball_rect.h = 1080;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -170,13 +175,18 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	App->textures->Unload(pinball);
 	return true;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	//pinball blit
+
+	App->renderer->Blit(pinball, SCREEN_WIDTH/2 - pinball_rect.w/2, 0, &pinball_rect);
+
+		
 	//ball in mouse position
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{

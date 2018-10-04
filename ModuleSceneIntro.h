@@ -23,6 +23,8 @@ public:
 	SDL_Texture* ball;
 	SDL_Texture* pinball;
 
+	SDL_Rect pinball_rect;
+
 	//SDL_Texture* box;
 	SDL_Texture* rick;
 };

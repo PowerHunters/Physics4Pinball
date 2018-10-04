@@ -18,11 +18,11 @@ public:
 public:
 	p2List<PhysBody*> circles;
 	//p2List<PhysBody*> boxes;
-	p2List<PhysBody*> edges;
+	p2List<PhysBody*> ricks;
 
 	SDL_Texture* ball;
 	SDL_Texture* pinball;
 
 	//SDL_Texture* box;
-	//SDL_Texture* rick;
+	SDL_Texture* rick;
 };

@@ -69,6 +69,69 @@ bool ModuleSceneIntro::Start()
 
 	fixures.add(App->physics->CreateFixChain(700, 0, BigStruct, 52));
 
+	int LeftStruct[26] = {
+		80, 727,
+		80, 821,
+		80, 827,
+		85, 831,
+		130, 856,
+		138, 857,
+		142, 854,
+		145, 850,
+		144, 844,
+		100, 720,
+		96, 716,
+		84, 717,
+		80, 721
+	};
+
+	fixures.add(App->physics->CreateFixChain(700, 0, LeftStruct, 26));
+
+	int RightStruct[26] = {
+		321, 846,
+		322, 852,
+		328, 856,
+		334, 857,
+		340, 855,
+		383, 829,
+		386, 825,
+		386, 722,
+		382, 716,
+		374, 715,
+		367, 717,
+		364, 722,
+		323, 842
+	};
+
+	fixures.add(App->physics->CreateFixChain(701, 0, RightStruct, 26));
+
+	int LeftLine[16] = {
+		49, 739,
+		50, 847,
+		143, 901,
+		143, 904,
+		140, 904,
+		45, 848,
+		45, 739,
+		47, 737
+	};
+
+	fixures.add(App->physics->CreateFixChain(700, -1, LeftLine, 16));
+
+	int RightLine[18] = {
+		421, 739,
+		421, 847,
+		418, 850,
+		326, 904,
+		323, 904,
+		324, 901,
+		418, 846,
+		418, 739,
+		420, 737
+	};
+
+	fixures.add(App->physics->CreateFixChain(700, 0, RightLine, 18));
+
 
 	int Pinball[258] = {
 		181, 113,
@@ -236,11 +299,13 @@ update_status ModuleSceneIntro::Update()
 		circles.add(App->physics->CreateCircle(486+ SCREEN_WIDTH / 2 - pinball_rect.w / 2, 890, 15));
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	//ball in start
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		// Pivot 0, 0
-		
+		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 50, 100));
+		circles.add(App->physics->CreateCircle( SCREEN_WIDTH / 2 + 100, 100, 15));
 	}
+
 	
 	// TODO 5: Draw all the circles using "circle" texture
 	// Draw all circles

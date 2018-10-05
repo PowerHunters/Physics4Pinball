@@ -15,7 +15,7 @@ Github repository: https://github.com/PowerHunters/Physics4Pinball
 
 Github organization: https://github.com/PowerHunters
 
-Changelist: 
+Changelist: https://github.com/PowerHunters/Physics4Pinball/blob/master/CHANGELOG.md
 
 ## Controls
 

@@ -10,7 +10,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	pinball = ball = circle = box = rick = NULL;
+	background_tex = ball_tex = circle_tex = box = rick = NULL;
 	pinball_rect.x = 0;
 	pinball_rect.y = 0;
 	pinball_rect.w = 518;
@@ -28,14 +28,11 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	//Textures===============================================
-	pinball = App->textures->Load("textures/Pinball.png");
-	ball = App->textures->Load("textures/ball.png");
+	background_tex = App->textures->Load("textures/Pinball.png");
+	ball_tex = App->textures->Load("textures/ball.png");
 	//PhyBodies==============================================
 	AddStaticBodies();
 	//Delete-------------------------------------------------
-	circle = App->textures->Load("textures/wheel.png");
-	box = App->textures->Load("textures/crate.png");
-	rick = App->textures->Load("textures/rick_head.png");
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
 	return ret;
@@ -52,7 +49,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->Blit(pinball, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
+	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
 
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -80,7 +77,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(ball_tex, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

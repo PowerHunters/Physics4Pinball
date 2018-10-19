@@ -20,14 +20,16 @@ public:
 
 public:
 	//PhysBodies==================================
+	PhysBody* ball_km;
+
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> chains;
 
 	//Textures====================================
-	SDL_Texture* ball;
-	SDL_Texture* pinball;
-	SDL_Texture* circle;
+	SDL_Texture* ball_tex;
+	SDL_Texture* background_tex;
+	SDL_Texture* circle_tex;
 
 	SDL_Rect pinball_rect;
 

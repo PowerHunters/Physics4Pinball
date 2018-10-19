@@ -12,6 +12,19 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
+enum FLIPPER_SIDE
+{
+	LEFT_FLIPPER,
+	RIGHT_FLIPPER
+};
+
+//class FLIPPER : public PhysBody
+//{
+//public:
+//	FLIPPER(){}
+//	FLIPPER_SIDE	 side;
+//};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -28,6 +41,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	SDL_Texture* texture;
 };
 
 // Module --------------------------------------
@@ -45,10 +59,23 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
 	PhysBody* CreateRectangle(int x, int y, int width, int height , bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
+
+	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_SIDE side);
+	//FLIPPER *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex);
+	//FLIPPER *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+
+	//flipers void methods
+	//void engageLeftFlipper();
+	//void engageRightFlipper();
+	//void disengageLeftFlipper();
+	//void disengageRightFlipper();
+
+	b2RevoluteJoint* right_flipper_joint;
+	b2RevoluteJoint* left_flipper_joint;
 
 private:
 

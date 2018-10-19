@@ -119,11 +119,12 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height , b
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float degrees)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = DEGTORAD* degrees;
 
 	b2Body* b = world->CreateBody(&body);
 
@@ -317,129 +318,130 @@ update_status ModulePhysics::PostUpdate()
 	return UPDATE_CONTINUE;
 }
 
-FLIPPER *ModulePhysics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
-{
-	// Rotor of the flipper
-	float32 radius = 5;
-	b2BodyDef rotor_def;
-	rotor_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
-	rotor_def.type = b2_staticBody;
-	b2Body *rotor = world->CreateBody(&rotor_def);
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
-	b2FixtureDef rotor_fixture;
-	rotor_fixture.shape = &shape;
-	rotor->CreateFixture(&rotor_fixture);
+//FLIPPER *ModulePhysics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
+//{
+//	// Rotor of the flipper
+//	float32 radius = 5;
+//	b2BodyDef rotor_def;
+//	rotor_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
+//	rotor_def.type = b2_staticBody;
+//	b2Body *rotor = world->CreateBody(&rotor_def);
+//	b2CircleShape shape;
+//	shape.m_radius = PIXEL_TO_METERS(radius);
+//	b2FixtureDef rotor_fixture;
+//	rotor_fixture.shape = &shape;
+//	rotor->CreateFixture(&rotor_fixture);
+//
+//	// Flipper
+//	b2BodyDef stick_def;
+//	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
+//	stick_def.type = b2_dynamicBody;
+//	b2Body *stick = world->CreateBody(&stick_def);
+//
+//	b2FixtureDef left_flip_fixture;
+//	int left_flipper[14] = {
+//		1, 1,
+//		46, 3,
+//		49, 6,
+//		46, 8,
+//		3, 9,
+//		0, 5,
+//		1, 1
+//	};
+//
+//	b2PolygonShape poly_shape;
+//	left_flip_fixture.shape = polyFromPoints(&poly_shape, left_flipper, sizeof(left_flipper) / sizeof(int));
+//	left_flip_fixture.density = 1.0f;
+//	stick->CreateFixture(&left_flip_fixture);
+//
+//	// PhysBody declaration
+//	FLIPPER* flip = new FLIPPER();
+//	flip->body = stick;
+//	stick->SetUserData(flip);
+//	flip->texture = tex;
+//	flip->side = LEFT_FLIPPER;
+//	flip->width = 0;
+//	flip->height = 0;
+//
+//	left_flipper_joint = createFlipperJoint(rotor, stick, lower_angle, upper_angle, LEFT_FLIPPER);
+//
+//	return flip;
+//}
 
-	// Flipper
-	b2BodyDef stick_def;
-	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
-	stick_def.type = b2_dynamicBody;
-	b2Body *stick = world->CreateBody(&stick_def);
+//FLIPPER *ModulePhysics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
+//{
+//	// Rotor of the flipper
+//	float32 radius = 5;
+//	b2BodyDef rotor_def;
+//	rotor_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
+//	rotor_def.type = b2_staticBody;
+//	b2Body *rotor = world->CreateBody(&rotor_def);
+//	b2CircleShape shape;
+//	shape.m_radius = PIXEL_TO_METERS(radius);
+//	b2FixtureDef rotor_fixture;
+//	rotor_fixture.shape = &shape;
+//	rotor->CreateFixture(&rotor_fixture);
+//
+//	// Flipper
+//	b2BodyDef stick_def;
+//	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
+//	stick_def.type = b2_dynamicBody;
+//	b2Body *stick = world->CreateBody(&stick_def);
+//
+//	b2FixtureDef right_flip_fixture;
+//	int right_flipper[14] = {
+//		47, 1,
+//		4, 3,
+//		2, 5,
+//		4, 7,
+//		47, 9,
+//		49, 5,
+//		47, 1
+//	};
+//
+//	b2PolygonShape poly_shape;
+//	right_flip_fixture.shape = polyFromPoints(&poly_shape, right_flipper, sizeof(right_flipper) / sizeof(int));
+//	right_flip_fixture.density = 1.0f;
+//	stick->CreateFixture(&right_flip_fixture);
+//
+//	// PhysBody declaration
+//	FLIPPER* flip = new FLIPPER();
+//	flip->body = stick;
+//	stick->SetUserData(flip);
+//	flip->texture = tex;
+//	flip->side = RIGHT_FLIPPER;
+//	flip->width = 0;
+//	flip->height = 0;
+//
+//	right_flipper_joint = createFlipperJoint(rotor, stick, lower_angle, upper_angle, RIGHT_FLIPPER);
+//
+//	return flip;
+//}
 
-	b2FixtureDef left_flip_fixture;
-	int left_flipper[14] = {
-		1, 1,
-		46, 3,
-		49, 6,
-		46, 8,
-		3, 9,
-		0, 5,
-		1, 1
-	};
-
-	b2PolygonShape poly_shape;
-	left_flip_fixture.shape = polyFromPoints(&poly_shape, left_flipper, sizeof(left_flipper) / sizeof(int));
-	left_flip_fixture.density = 1.0f;
-	stick->CreateFixture(&left_flip_fixture);
-
-	// PhysBody declaration
-	FLIPPER* flip = new FLIPPER();
-	flip->body = stick;
-	stick->SetUserData(flip);
-	flip->texture = tex;
-	flip->side = LEFT_FLIPPER;
-	flip->width = 0;
-	flip->height = 0;
-
-	left_flipper_joint = createFlipperJoint(rotor, stick, lower_angle, upper_angle, LEFT_FLIPPER);
-
-	return flip;
-}
-
-FLIPPER *ModulePhysics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
-{
-	// Rotor of the flipper
-	float32 radius = 5;
-	b2BodyDef rotor_def;
-	rotor_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
-	rotor_def.type = b2_staticBody;
-	b2Body *rotor = world->CreateBody(&rotor_def);
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
-	b2FixtureDef rotor_fixture;
-	rotor_fixture.shape = &shape;
-	rotor->CreateFixture(&rotor_fixture);
-
-	// Flipper
-	b2BodyDef stick_def;
-	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
-	stick_def.type = b2_dynamicBody;
-	b2Body *stick = world->CreateBody(&stick_def);
-
-	b2FixtureDef right_flip_fixture;
-	int right_flipper[14] = {
-		47, 1,
-		4, 3,
-		2, 5,
-		4, 7,
-		47, 9,
-		49, 5,
-		47, 1
-	};
-
-	b2PolygonShape poly_shape;
-	right_flip_fixture.shape = polyFromPoints(&poly_shape, right_flipper, sizeof(right_flipper) / sizeof(int));
-	right_flip_fixture.density = 1.0f;
-	stick->CreateFixture(&right_flip_fixture);
-
-	// PhysBody declaration
-	FLIPPER* flip = new FLIPPER();
-	flip->body = stick;
-	stick->SetUserData(flip);
-	flip->texture = tex;
-	flip->side = RIGHT_FLIPPER;
-	flip->width = 0;
-	flip->height = 0;
-
-	right_flipper_joint = createFlipperJoint(rotor, stick, lower_angle, upper_angle, RIGHT_FLIPPER);
-
-	return flip;
-}
-b2RevoluteJoint *ModulePhysics::createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_SIDE side)
-{
-	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = rotor;
-	revoluteJointDef.bodyB = stick;
-	revoluteJointDef.collideConnected = false;
-
-	revoluteJointDef.enableLimit = true;
-	revoluteJointDef.lowerAngle = lower_angle * DEGTORAD;
-	revoluteJointDef.upperAngle = upper_angle * DEGTORAD;
-
-	revoluteJointDef.enableMotor = false;
-	revoluteJointDef.maxMotorTorque = 720.0f * DEGTORAD;
-	revoluteJointDef.motorSpeed = 0.0f;
-
-	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-
-	if (side == LEFT_FLIPPER)
-		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(5), PIXEL_TO_METERS(4));
-	else
-		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(45), PIXEL_TO_METERS(4));
-
-	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
-}
+//b2RevoluteJoint *ModulePhysics::createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_SIDE side)
+//{
+//	b2RevoluteJointDef revoluteJointDef;
+//	revoluteJointDef.bodyA = rotor;
+//	revoluteJointDef.bodyB = stick;
+//	revoluteJointDef.collideConnected = false;
+//
+//	revoluteJointDef.enableLimit = true;
+//	revoluteJointDef.lowerAngle = lower_angle * DEGTORAD;
+//	revoluteJointDef.upperAngle = upper_angle * DEGTORAD;
+//
+//	revoluteJointDef.enableMotor = false;
+//	revoluteJointDef.maxMotorTorque = 720.0f * DEGTORAD;
+//	revoluteJointDef.motorSpeed = 0.0f;
+//
+//	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+//
+//	if (side == LEFT_FLIPPER)
+//		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(5), PIXEL_TO_METERS(4));
+//	else
+//		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(45), PIXEL_TO_METERS(4));
+//
+//	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+//}
 
 // Called before quitting
 bool ModulePhysics::CleanUp()

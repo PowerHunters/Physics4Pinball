@@ -20,7 +20,9 @@ public:
 
 public:
 	//PhysBodies==================================
-	PhysBody* ball_km;
+	PhysBody* ball = NULL;
+	PhysBody* sensor = NULL;
+
 
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;

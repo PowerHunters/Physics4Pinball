@@ -32,6 +32,7 @@ bool ModuleSceneIntro::Start()
 	ball_tex = App->textures->Load("textures/ball.png");
 	//PhyBodies==============================================
 	AddStaticBodies();
+	sensor = App->physics->CreateRectangleSensor(900, 500, 10,60, 45);
 	//Delete-------------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
@@ -49,44 +50,51 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
 
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
-		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-
-	// Prepare for raycast ------------------------------------------------------
-	
+	// Prepare for raycast =====================================================
 	iPoint mouse;
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
+	{
+		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
+		ball->listener = this;
+	}
 
-	while(c != NULL)
+	// All draw functions ======================================================
+	//------Background--------------------------------------------
+	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
+	//--------Ball------------------------------------------------
+	if (ball != nullptr)
 	{
 		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball_tex, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
+		ball->GetPosition(x, y);
+		SDL_Rect rect = { 0, 0, 22, 22 }; 
+		App->renderer->Blit(ball_tex, x, y, &rect);
 	}
+
+	//p2List_item<PhysBody*>* c = circles.getFirst();
+
+	//while(c != NULL)
+	//{
+	//	int x, y;
+	//	c->data->GetPosition(x, y);
+	//	App->renderer->Blit(ball_tex, x, y, NULL, 1.0f, c->data->GetRotation());
+	//	c = c->next;
+	//}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (circles.find(bodyA) != -1 && boxes.find(bodyB) != -1)
+	if (ball == bodyA && circles.find(bodyB) != -1)
+	{
+		App->audio->PlayFx(bonus_fx);
+	}
+
+	if (ball == bodyA && sensor == bodyB) 
 	{
 		App->audio->PlayFx(bonus_fx);
 	}

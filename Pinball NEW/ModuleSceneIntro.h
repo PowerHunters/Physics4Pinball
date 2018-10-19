@@ -22,10 +22,7 @@ public:
 	//PhysBodies==================================
 	PhysBody* ball = NULL;
 	PhysBody* sensor = NULL;
-
-
-	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
+	p2List<PhysBody*> chains;
 	p2List<PhysBody*> chains;
 
 	//Textures====================================

@@ -9,7 +9,12 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	//Textures===================================
+	pinball = ball = circle = box = rick = NULL;
+	pinball_rect.x = 0;
+	pinball_rect.y = 0;
+	pinball_rect.w = 518;
+	pinball_rect.h = 1080;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -23,15 +28,15 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	//Textures===============================================
-	pinball = App->textures->Load("pinball/Pinball.png");
-	ball = App->textures->Load("pinball/ball.png");
+	pinball = App->textures->Load("textures/Pinball.png");
+	ball = App->textures->Load("textures/ball.png");
 	//PhyBodies==============================================
 	AddStaticBodies();
 	//Delete-------------------------------------------------
-	circle = App->textures->Load("pinball/wheel.png");
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	circle = App->textures->Load("textures/wheel.png");
+	box = App->textures->Load("textures/crate.png");
+	rick = App->textures->Load("textures/rick_head.png");
+	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
 	return ret;
 }
@@ -47,6 +52,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	App->renderer->Blit(pinball, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
+
+
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
@@ -73,26 +81,6 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	c = chains.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

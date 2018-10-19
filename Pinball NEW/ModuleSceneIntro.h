@@ -29,6 +29,8 @@ public:
 	SDL_Texture* pinball;
 	SDL_Texture* circle;
 
+	SDL_Rect pinball_rect;
+
 	//Sfx=========================================
 
 

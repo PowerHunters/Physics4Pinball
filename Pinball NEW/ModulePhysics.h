@@ -45,7 +45,7 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
 	PhysBody* CreateRectangle(int x, int y, int width, int height , bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

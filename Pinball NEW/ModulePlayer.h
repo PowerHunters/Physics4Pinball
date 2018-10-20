@@ -22,11 +22,13 @@ public:
 	void engageFlipper(PhysBody *flipper, float impulse);
 
 public:
+	float push_force = 0.0f;
+
 	//PhysBodies ==================================
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;
 	PhysBody* flipper_l = NULL;
-	//PhysBody* starter = NULL;
+	PhysBody* starter = NULL;
 
 	//Textures ====================================
 	SDL_Texture* ball_tex;

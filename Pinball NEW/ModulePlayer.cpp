@@ -22,34 +22,23 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	ball_tex = App->textures->Load("textures/ball.png");
 
+	int left_flipper[26] = {
+	135, 912,
+	139, 907,
+	146, 904,
+	153, 906,
+	203, 944,
+	207, 950,
+	205, 956,
+	199, 960,
+	195, 960,
+	160, 942,
+	140, 932,
+	135, 926,
+	133, 919
+	};
 
-	flipper_r = App->physics->CreateRectangle(360, 770, 99, 19, true);
-	flipper_l = App->physics->CreateRectangle(250, 770, 99, 19, true);
-
-	PhysBody* right_joint = App->physics->CreateCircle(401, 772, 5, false);
-	PhysBody* left_joint = App->physics->CreateCircle(205, 772, 5, false);
-
-	b2RevoluteJointDef RightFJoint;
-	b2RevoluteJointDef LeftFJoint;
-
-	b2RevoluteJoint* joint_r;
-	b2RevoluteJoint* joint_l;
-
-
-	RightFJoint.Initialize(flipper_r->body, right_joint->body, right_joint->body->GetWorldCenter());
-	LeftFJoint.Initialize(flipper_l->body, left_joint->body, left_joint->body->GetWorldCenter());
-
-	RightFJoint.lowerAngle = -30 * DEGTORAD;
-	RightFJoint.upperAngle = 30 * DEGTORAD;
-	RightFJoint.enableLimit = true;
-	RightFJoint.collideConnected = false;
-	joint_r = (b2RevoluteJoint*)App->physics->world->CreateJoint(&RightFJoint);
-
-	LeftFJoint.lowerAngle = -30 * DEGTORAD;
-	LeftFJoint.upperAngle = 30 * DEGTORAD;
-	LeftFJoint.enableLimit = true;
-	LeftFJoint.collideConnected = false;
-	joint_l = (b2RevoluteJoint*)App->physics->world->CreateJoint(&LeftFJoint);
+	flipper_l = App->physics->CreateFlipper(b2Vec2(0, 0), left_flipper, 26, b2Vec2(0, 0), -45 , 70 );
 
 	return true;
 }

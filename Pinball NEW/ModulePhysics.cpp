@@ -202,8 +202,6 @@ update_status ModulePhysics::PostUpdate()
 	b2Vec2 mouse(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
 	body_clicked = nullptr;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		for(b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
@@ -278,14 +276,9 @@ update_status ModulePhysics::PostUpdate()
 				if (f->TestPoint(mouse))
 					body_clicked = f->GetBody();
 			 }
-			// test if the current body contains mouse position
 		}
 	}
 
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
 	if (mouse_joint == nullptr && body_clicked != nullptr)
 	{
 		b2MouseJointDef def;
@@ -298,10 +291,6 @@ update_status ModulePhysics::PostUpdate()
 		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 	}
 
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
-
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint)
 	{
 		mouse_joint->SetTarget(mouse);
@@ -309,17 +298,118 @@ update_status ModulePhysics::PostUpdate()
 		App->renderer->DrawLine(METERS_TO_PIXELS(posA.x), METERS_TO_PIXELS(posA.y), METERS_TO_PIXELS(posB.x), METERS_TO_PIXELS(posB.y), 255, 0, 0);
 	}
 
-	// TODO 4: If the player releases the mouse button, destroy the joint
-
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint)
 	{
 		world->DestroyJoint(mouse_joint);
 		mouse_joint = nullptr;
 	}
 
-
-
 	return UPDATE_CONTINUE;
+}
+
+PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int* points, int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
+{
+	PhysBody* flipper = CreateChain(position.x, position.y,  points, size);
+	flipper->texture = tex;
+	PhysBody* rotor = App->physics->CreateCircle(rotation_point.x, rotation_point.y, 5, false);
+
+	b2RevoluteJointDef joint_def;
+	b2RevoluteJoint* joint;
+
+	joint_def.bodyA = flipper->body;
+	joint_def.bodyB = rotor->body;
+	joint_def.lowerAngle = -lower_angle * DEGTORAD;
+	joint_def.upperAngle = upper_angle * DEGTORAD;
+	joint_def.enableLimit = true;
+	joint_def.collideConnected = false;
+	joint = (b2RevoluteJoint*)world->CreateJoint(&joint_def);
+
+	return flipper;
+}
+
+// Called before quitting
+bool ModulePhysics::CleanUp()
+{
+	LOG("Destroying physics world");
+
+	// Delete the whole physics world!
+	delete world;
+
+	return true;
+}
+
+void PhysBody::GetPosition(int& x, int &y) const
+{
+	b2Vec2 pos = body->GetPosition();
+	x = METERS_TO_PIXELS(pos.x) - (width);
+	y = METERS_TO_PIXELS(pos.y) - (height);
+}
+
+float PhysBody::GetRotation() const
+{
+	return RADTODEG * body->GetAngle();
+}
+
+bool PhysBody::Contains(int x, int y) const
+{
+	b2Vec2 p(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	const b2Fixture* fixture = body->GetFixtureList();
+
+	while(fixture != NULL)
+	{
+		if(fixture->GetShape()->TestPoint(body->GetTransform(), p) == true)
+			return true;
+		fixture = fixture->GetNext();
+	}
+
+	return false;
+}
+
+int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
+{
+	int ret = -1;
+
+	b2RayCastInput input;
+	b2RayCastOutput output;
+
+	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	input.maxFraction = 1.0f;
+
+	const b2Fixture* fixture = body->GetFixtureList();
+
+	while(fixture != NULL)
+	{
+		if(fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
+		{
+			// do we want the normal ?
+
+			float fx = x2 - x1;
+			float fy = y2 - y1;
+			float dist = sqrtf((fx*fx) + (fy*fy));
+
+			normal_x = output.normal.x;
+			normal_y = output.normal.y;
+
+			return output.fraction * dist;
+		}
+		fixture = fixture->GetNext();
+	}
+
+	return ret;
+}
+
+void ModulePhysics::BeginContact(b2Contact* contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if(physA && physA->listener != NULL)
+		physA->listener->OnCollision(physA, physB);
+
+	if(physB && physB->listener != NULL)
+		physB->listener->OnCollision(physB, physA);
 }
 
 //FLIPPER *ModulePhysics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
@@ -446,91 +536,6 @@ update_status ModulePhysics::PostUpdate()
 //
 //	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 //}
-
-// Called before quitting
-bool ModulePhysics::CleanUp()
-{
-	LOG("Destroying physics world");
-
-	// Delete the whole physics world!
-	delete world;
-
-	return true;
-}
-
-void PhysBody::GetPosition(int& x, int &y) const
-{
-	b2Vec2 pos = body->GetPosition();
-	x = METERS_TO_PIXELS(pos.x) - (width);
-	y = METERS_TO_PIXELS(pos.y) - (height);
-}
-
-float PhysBody::GetRotation() const
-{
-	return RADTODEG * body->GetAngle();
-}
-
-bool PhysBody::Contains(int x, int y) const
-{
-	b2Vec2 p(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	const b2Fixture* fixture = body->GetFixtureList();
-
-	while(fixture != NULL)
-	{
-		if(fixture->GetShape()->TestPoint(body->GetTransform(), p) == true)
-			return true;
-		fixture = fixture->GetNext();
-	}
-
-	return false;
-}
-
-int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
-{
-	int ret = -1;
-
-	b2RayCastInput input;
-	b2RayCastOutput output;
-
-	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
-	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	input.maxFraction = 1.0f;
-
-	const b2Fixture* fixture = body->GetFixtureList();
-
-	while(fixture != NULL)
-	{
-		if(fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
-		{
-			// do we want the normal ?
-
-			float fx = x2 - x1;
-			float fy = y2 - y1;
-			float dist = sqrtf((fx*fx) + (fy*fy));
-
-			normal_x = output.normal.x;
-			normal_y = output.normal.y;
-
-			return output.fraction * dist;
-		}
-		fixture = fixture->GetNext();
-	}
-
-	return ret;
-}
-
-void ModulePhysics::BeginContact(b2Contact* contact)
-{
-	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
-	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
-
-	if(physA && physA->listener != NULL)
-		physA->listener->OnCollision(physA, physB);
-
-	if(physB && physB->listener != NULL)
-		physB->listener->OnCollision(physB, physA);
-}
 
 //void ModulePhysics::engageRightFlipper()
 //{

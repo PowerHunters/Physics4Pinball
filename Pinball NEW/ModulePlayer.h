@@ -19,7 +19,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	//Flipper actions ===============================
-	void engageFlipper(PhysBody *flipper);
+	void engageFlipper(PhysBody *flipper, float impulse);
 
 public:
 	//PhysBodies ==================================

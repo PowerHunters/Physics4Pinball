@@ -22,16 +22,16 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	ball_tex = App->textures->Load("textures/ball.png");
 
-	flipper_l = App->physics->CreateFlipper(b2Vec2(187, 920), 70, 10, b2Vec2(147, 920), -30 , 30 );
+	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), 70, 18, b2Vec2(147, 920), -30 , 30 );
+	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), 70, 18, b2Vec2(320, 920), -30, 30);
+
+
+
 	//starter = App->physics->CreateStarter(313, 484, 10, 10, starter_tex);
-
-
 	/*starter_tex = App->textures->Load("textures/ball.png");*/
 	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
 	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
 	//starter_fx = App->audio->LoadFx("sounds/fx/launcher.ogg");
-	
-
 
 	return true;
 }
@@ -42,7 +42,6 @@ bool ModulePlayer::CleanUp()
 	LOG("Unloading player");
 	App->textures->Unload(ball_tex);
 	//App->textures->Unload(starter_tex);
-
 	return true;
 }
 
@@ -80,7 +79,12 @@ update_status ModulePlayer::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_l);
+		engageFlipper(flipper_l, -9.0f);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		engageFlipper(flipper_r, 9.0f);
 	}
 
 	// All draw functions ======================================================
@@ -117,10 +121,10 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 }
 
-void ModulePlayer::engageFlipper(PhysBody *flipper)
+void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)
 {
 	if (flipper)
 	{
-		flipper->body->ApplyAngularImpulse(-9.0f, true);
+		flipper->body->ApplyAngularImpulse(impulse, true);
 	}
 }

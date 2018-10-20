@@ -18,15 +18,17 @@ public:
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
-public:
+	//Flipper actions ===============================
+	void engageFlipper(PhysBody *flipper);
 
-	//PhysBodies==================================
+public:
+	//PhysBodies ==================================
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;
 	PhysBody* flipper_l = NULL;
 	//PhysBody* starter = NULL;
 
-	//Textures====================================
+	//Textures ====================================
 	SDL_Texture* ball_tex;
 	//SDL_Texture* starter_tex;
 	////Sfx=========================================

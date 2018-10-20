@@ -59,32 +59,19 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
 	PhysBody* CreateRectangle(int x, int y, int width, int height , bool dynamic = true);
+	PhysBody* CreatePolygon(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
-	PhysBody *CreateFlipper(b2Vec2 position, int* points ,int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex = nullptr);
 	//PhysBody *CreateStarter(int x, int y, int width, int height, SDL_Texture *tex = nullptr);
-
+	PhysBody *CreateFlipper(b2Vec2 position, int width, int height, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex = nullptr);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-	//b2PrismaticJoint* propulsor_joint;
-	/*b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_SIDE side);*/
-	//FLIPPER *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex);
-
-
-	//Flipper actions 
-	//void engageLeftFlipper();
-	//void engageRightFlipper();
-	//void disengageLeftFlipper();
-	//void disengageRightFlipper();
-
-	b2World* world;
-
 private:
 
 	bool debug;
-
+	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 	b2Body* body_clicked;

@@ -25,25 +25,10 @@ bool ModulePlayer::Start()
 	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
 	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
 	//starter_fx = App->audio->LoadFx("sounds/fx/launcher.ogg");
-
-	int left_flipper[26] = {
-	135, 912,
-	139, 907,
-	146, 904,
-	153, 906,
-	203, 944,
-	207, 950,
-	205, 956,
-	199, 960,
-	195, 960,
-	160, 942,
-	140, 932,
-	135, 926,
-	133, 919
-	};
-
-	flipper_l = App->physics->CreateFlipper(b2Vec2(0, 0), left_flipper, 26, b2Vec2(0, 0), -45 , 70 );
+	
 	//starter = App->physics->CreateStarter(313, 484, 10, 10, starter_tex);
+	flipper_l = App->physics->CreateFlipper(b2Vec2(187, 920), 80, 10, b2Vec2(147, 920), -30 , 30 );
+
 
 	return true;
 }
@@ -73,6 +58,7 @@ update_status ModulePlayer::Update()
 		ball->listener = this;
 	}
 
+
 	//float push_force = 0.0f;
 
 	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -88,6 +74,11 @@ update_status ModulePlayer::Update()
 	//}
 	//else
 	//	push_force = 0.0f;
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	{
+		engageFlipper(flipper_l);
+	}
 
 	// All draw functions ======================================================
 
@@ -123,4 +114,10 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 }
 
-
+void ModulePlayer::engageFlipper(PhysBody *flipper)
+{
+	if (flipper)
+	{
+		flipper->body->ApplyAngularImpulse(-9.0f, true);
+	}
+}

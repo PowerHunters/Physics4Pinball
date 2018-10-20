@@ -22,7 +22,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	ball_tex = App->textures->Load("textures/ball.png");
 
-	flipper_l = App->physics->CreateFlipper(b2Vec2(187, 920), 80, 10, b2Vec2(147, 920), -30 , 30 );
+	flipper_l = App->physics->CreateFlipper(b2Vec2(187, 920), 70, 10, b2Vec2(147, 920), -30 , 30 );
 
 	return true;
 }

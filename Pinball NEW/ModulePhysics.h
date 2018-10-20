@@ -34,6 +34,7 @@ public:
 
 	void GetPosition(int& x, int &y) const;
 	float GetRotation() const;
+	//void Push(float x, float y);
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
@@ -61,11 +62,13 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
 	PhysBody *CreateFlipper(b2Vec2 position, int* points ,int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex = nullptr);
+	//PhysBody *CreateStarter(int x, int y, int width, int height, SDL_Texture *tex = nullptr);
+
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-
+	//b2PrismaticJoint* propulsor_joint;
 	/*b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_SIDE side);*/
 	//FLIPPER *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex);
 

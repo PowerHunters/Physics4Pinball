@@ -327,6 +327,60 @@ PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int* points, int size, b
 	return flipper;
 }
 
+//PhysBody *ModulePhysics::CreateStarter(int x, int y, int width, int height, SDL_Texture* tex)
+//{
+//
+//	PhysBody* start_box = App->physics->CreateRectangle(x, y, width, height, true);
+//	start_box->texture = tex;
+//
+//	//b2BodyDef bd;
+//	//bd.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+//	//bd.type = b2_dynamicBody;
+//
+//	//b2Body *b = world->CreateBody(&bd);
+//
+//	//b2PolygonShape shape;
+//
+//	//int width = 16, height = 31;
+//	//shape.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+//
+//	//b2FixtureDef fixture;
+//	//fixture.shape = &shape;
+//	//fixture.density = 1.0f;
+//
+//	//b->CreateFixture(&fixture);
+//
+//	//App->scene->propulsor = new PhysBody();
+//	//App->scene->propulsor->body = b;
+//	//App->scene->propulsor->body->SetUserData(app->scene->propulsor);
+//	//App->scene->propulsor->texture = texture;
+//	//App->scene->propulsor->width = width * 0.5f;
+//	//App->scene->propulsor->height = height * 0.5f;
+//	
+//	b2PrismaticJointDef joint_def;
+//	b2PrismaticJoint* joint;
+//
+//	b2Vec2 worldAxis(1.0f, 0.0f);
+//
+//	joint_def.bodyA = ground;
+//	joint_def.bodyB = start_box->body;
+//	joint_def.localAnchorA.Set(0, 0);
+//	joint_def.localAxisA.Set(0, -1);
+//
+//	joint_def.enableLimit = true;
+//	joint_def.lowerTranslation = -0.5f;
+//	joint_def.upperTranslation = 0.0f;
+//		
+//	joint_def.enableMotor = true;
+//	joint_def.maxMotorForce = 20.0f;
+//	joint_def.motorSpeed = 1.0f;
+//		
+//
+//	joint = (b2PrismaticJoint*)world->CreateJoint(&joint_def);
+//
+//	return start_box;
+//}
+
 // Called before quitting
 bool ModulePhysics::CleanUp()
 {
@@ -349,6 +403,11 @@ float PhysBody::GetRotation() const
 {
 	return RADTODEG * body->GetAngle();
 }
+
+//void PhysBody::Push(float x, float y)
+//{
+//	body->ApplyForceToCenter(b2Vec2(x, y), true);
+//}
 
 bool PhysBody::Contains(int x, int y) const
 {

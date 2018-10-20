@@ -21,6 +21,10 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 	ball_tex = App->textures->Load("textures/ball.png");
+	/*starter_tex = App->textures->Load("textures/ball.png");*/
+	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
+	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
+	//starter_fx = App->audio->LoadFx("sounds/fx/launcher.ogg");
 
 	int left_flipper[26] = {
 	135, 912,
@@ -39,6 +43,7 @@ bool ModulePlayer::Start()
 	};
 
 	flipper_l = App->physics->CreateFlipper(b2Vec2(0, 0), left_flipper, 26, b2Vec2(0, 0), -45 , 70 );
+	//starter = App->physics->CreateStarter(313, 484, 10, 10, starter_tex);
 
 	return true;
 }
@@ -47,6 +52,8 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
+	App->textures->Unload(ball_tex);
+	//App->textures->Unload(starter_tex);
 
 	return true;
 }
@@ -66,6 +73,22 @@ update_status ModulePlayer::Update()
 		ball->listener = this;
 	}
 
+	//float push_force = 0.0f;
+
+	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	//{
+	//	push_force += 175.0f;
+	//	starter->push(0, push_force);
+	//}
+	//else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	//{
+	//	push_force = -500.0f;
+	//	starter->push(0, push_force);
+	//	/*App->audio->playFx(start_fx);*/
+	//}
+	//else
+	//	push_force = 0.0f;
+
 	// All draw functions ======================================================
 
 	//--------Ball------------------------------------------------
@@ -76,6 +99,12 @@ update_status ModulePlayer::Update()
 		SDL_Rect rect = { 0, 0, 22, 22 };
 		App->renderer->Blit(ball_tex, x, y, &rect);
 	}
+
+	//--------Starter----------------------------------------------
+	//int x, y;
+	//starter->GetPosition(x, y);
+	//SDL_Rect rect = { 0, 0, 22, 22 };
+	//App->renderer->Blit(starter_tex, x, y, &rect);
 
 	return UPDATE_CONTINUE;
 }

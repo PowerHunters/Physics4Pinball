@@ -24,10 +24,14 @@ public:
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;
 	PhysBody* flipper_l = NULL;
+	//PhysBody* starter = NULL;
 
 	//Textures====================================
 	SDL_Texture* ball_tex;
-	//Sfx=========================================
-
+	//SDL_Texture* starter_tex;
+	////Sfx=========================================
+	//uint flipper_fx;
+	//uint lose_fx;
+	//uint starter_fx;
 
 };

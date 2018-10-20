@@ -22,23 +22,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	ball_tex = App->textures->Load("textures/ball.png");
 
-	int left_flipper[26] = {
-	135, 912,
-	139, 907,
-	146, 904,
-	153, 906,
-	203, 944,
-	207, 950,
-	205, 956,
-	199, 960,
-	195, 960,
-	160, 942,
-	140, 932,
-	135, 926,
-	133, 919
-	};
-
-	flipper_l = App->physics->CreateFlipper(b2Vec2(0, 0), left_flipper, 26, b2Vec2(0, 0), -45 , 70 );
+	flipper_l = App->physics->CreateFlipper(b2Vec2(187, 920), 80, 10, b2Vec2(147, 920), -30 , 30 );
 
 	return true;
 }
@@ -65,6 +49,13 @@ update_status ModulePlayer::Update()
 		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
 		ball->listener = this;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	{
+		engageFlipper(flipper_l);
+	}
+
+
 
 	// All draw functions ======================================================
 
@@ -94,4 +85,10 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 }
 
-
+void ModulePlayer::engageFlipper(PhysBody *flipper)
+{
+	if (flipper)
+	{
+		flipper->body->ApplyAngularImpulse(-9.0f, true);
+	}
+}

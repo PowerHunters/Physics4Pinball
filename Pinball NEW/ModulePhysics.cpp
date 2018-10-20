@@ -186,7 +186,68 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool d
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size, bool dynamic)
+{
+	b2BodyDef body;
 
+	if (dynamic)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(p, size/2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int width, int height, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
+{
+	PhysBody* flipper = CreateRectangle(position.x, position.y, width, height);
+	flipper->texture = tex;
+	PhysBody* rotor = App->physics->CreateCircle(rotation_point.x, rotation_point.y, 5 , false);
+
+	b2RevoluteJointDef joint_def;
+	b2RevoluteJoint* joint;
+
+	joint_def.Initialize(flipper->body, rotor->body, rotor->body->GetWorldCenter());
+
+	joint_def.lowerAngle = lower_angle * DEGTORAD;
+	joint_def.upperAngle = upper_angle * DEGTORAD;
+	joint_def.enableMotor = true;
+	joint_def.maxMotorTorque = 0.0f;
+	joint_def.motorSpeed = 4.0f;
+	joint_def.enableLimit = true;
+	joint_def.collideConnected = false;
+
+	joint = (b2RevoluteJoint*)world->CreateJoint(&joint_def);
+
+	return flipper;
+}
 
 
 
@@ -228,13 +289,13 @@ update_status ModulePhysics::PostUpdate()
 					{
 						v = b->GetWorldPoint(polygonShape->GetVertex(i));
 						if(i > 0)
-							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
+							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
 
 						prev = v;
 					}
 
 					v = b->GetWorldPoint(polygonShape->GetVertex(0));
-					App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
+					App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
 				}
 				break;
 
@@ -305,26 +366,6 @@ update_status ModulePhysics::PostUpdate()
 	}
 
 	return UPDATE_CONTINUE;
-}
-
-PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int* points, int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
-{
-	PhysBody* flipper = CreateChain(position.x, position.y,  points, size);
-	flipper->texture = tex;
-	PhysBody* rotor = App->physics->CreateCircle(rotation_point.x, rotation_point.y, 5, false);
-
-	b2RevoluteJointDef joint_def;
-	b2RevoluteJoint* joint;
-
-	joint_def.bodyA = flipper->body;
-	joint_def.bodyB = rotor->body;
-	joint_def.lowerAngle = -lower_angle * DEGTORAD;
-	joint_def.upperAngle = upper_angle * DEGTORAD;
-	joint_def.enableLimit = true;
-	joint_def.collideConnected = false;
-	joint = (b2RevoluteJoint*)world->CreateJoint(&joint_def);
-
-	return flipper;
 }
 
 // Called before quitting

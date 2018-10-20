@@ -23,7 +23,7 @@ public:
 	PhysBody* ball = NULL;
 	PhysBody* sensor = NULL;
 	p2List<PhysBody*> chains;
-	p2List<PhysBody*> chains;
+	p2List<PhysBody*> circles;
 
 	//Textures====================================
 	SDL_Texture* ball_tex;

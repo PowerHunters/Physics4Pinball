@@ -6,11 +6,12 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex = ball_tex = circle_tex = box = rick = NULL;
+	background_tex =  circle_tex = NULL;
 	pinball_rect.x = 0;
 	pinball_rect.y = 0;
 	pinball_rect.w = 518;
@@ -29,10 +30,9 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	//Textures===============================================
 	background_tex = App->textures->Load("textures/Pinball.png");
-	ball_tex = App->textures->Load("textures/ball.png");
 	//PhyBodies==============================================
 	AddStaticBodies();
-	sensor = App->physics->CreateRectangleSensor(900, 500, 10,60, 45);
+	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
 	//Delete-------------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
@@ -50,62 +50,24 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
-	// Prepare for raycast =====================================================
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
-	{
-		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
-		ball->listener = this;
-	}
-
 	// All draw functions ======================================================
 	//------Background--------------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
-	//--------Ball------------------------------------------------
-	if (ball != nullptr)
-	{
-		int x, y;
-		ball->GetPosition(x, y);
-		SDL_Rect rect = { 0, 0, 22, 22 }; 
-		App->renderer->Blit(ball_tex, x, y, &rect);
-	}
-
-	//p2List_item<PhysBody*>* c = circles.getFirst();
-
-	//while(c != NULL)
-	//{
-	//	int x, y;
-	//	c->data->GetPosition(x, y);
-	//	App->renderer->Blit(ball_tex, x, y, NULL, 1.0f, c->data->GetRotation());
-	//	c = c->next;
-	//}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (ball == bodyA && circles.find(bodyB) != -1)
-	{
-		App->audio->PlayFx(bonus_fx);
-	}
 
-	if (ball == bodyA && sensor == bodyB) 
-	{
-		App->audio->PlayFx(bonus_fx);
-	}
-	
+
 }
 
 void ModuleSceneIntro::AddStaticBodies()
 {
-	circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
-	circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
-	circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
+	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
+	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
+	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
 
 	int BigStruct[52] = {
 		98, 402,
@@ -136,7 +98,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		94, 403
 	};
 
-	chains.add(App->physics->CreateChain(700, 0, BigStruct, 52, false));
+	board_parts.add(App->physics->CreateChain(0, 0, BigStruct, 52, false));
 
 	int LeftStruct[26] = {
 		80, 727,
@@ -154,7 +116,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		80, 721
 	};
 
-	chains.add(App->physics->CreateChain(700, 0, LeftStruct, 26, false));
+	board_parts.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
 
 	int RightStruct[26] = {
 		321, 846,
@@ -172,7 +134,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		323, 842
 	};
 
-	chains.add(App->physics->CreateChain(701, 0, RightStruct, 26, false));
+	board_parts.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
 
 	int LeftLine[16] = {
 		49, 739,
@@ -185,7 +147,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		47, 737
 	};
 
-	chains.add(App->physics->CreateChain(700, -1, LeftLine, 16, false));
+	board_parts.add(App->physics->CreateChain(0, 0, LeftLine, 16, false));
 
 	int RightLine[18] = {
 		421, 739,
@@ -199,7 +161,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		420, 737
 	};
 
-	chains.add(App->physics->CreateChain(700, 0, RightLine, 18 , false));
+	board_parts.add(App->physics->CreateChain(0, 0, RightLine, 18 , false));
 
 	int Pinball[258] = {
 		181, 113,
@@ -333,6 +295,6 @@ void ModuleSceneIntro::AddStaticBodies()
 		174, 115
 	};
 
-	chains.add(App->physics->CreateChain(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, Pinball, 258, false));
+	board_parts.add(App->physics->CreateChain(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, Pinball, 258, false));
 
 }

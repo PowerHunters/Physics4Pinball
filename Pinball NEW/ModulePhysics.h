@@ -68,19 +68,18 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-	//flipers void methods
+	//Flipper actions 
 	//void engageLeftFlipper();
 	//void engageRightFlipper();
 	//void disengageLeftFlipper();
 	//void disengageRightFlipper();
 
-	b2RevoluteJoint* right_flipper_joint;
-	b2RevoluteJoint* left_flipper_joint;
+	b2World* world;
 
 private:
 
 	bool debug;
-	b2World* world;
+
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 	b2Body* body_clicked;

@@ -20,16 +20,13 @@ public:
 
 public:
 	//PhysBodies==================================
-	PhysBody* ball = NULL;
 	PhysBody* sensor = NULL;
-	p2List<PhysBody*> chains;
-	p2List<PhysBody*> circles;
+	p2List<PhysBody*> board_parts;
+	p2List<PhysBody*> bouncers;
 
 	//Textures====================================
-	SDL_Texture* ball_tex;
 	SDL_Texture* background_tex;
 	SDL_Texture* circle_tex;
-
 	SDL_Rect pinball_rect;
 
 	//Sfx=========================================
@@ -37,7 +34,5 @@ public:
 
 
 	//Delete------------------------
-	SDL_Texture* box;
-	SDL_Texture* rick;
 	uint bonus_fx;
 };

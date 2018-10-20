@@ -1,7 +1,10 @@
-#pragma once
 #include "Module.h"
-#include "Globals.h"
+#include "p2List.h"
 #include "p2Point.h"
+#include "Globals.h"
+
+class PhysBody;
+struct SDL_Texture;
 
 class ModulePlayer : public Module
 {
@@ -13,6 +16,18 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 public:
+
+	//PhysBodies==================================
+	PhysBody* ball = NULL;
+	PhysBody* flipper_r = NULL;
+	PhysBody* flipper_l = NULL;
+
+	//Textures====================================
+	SDL_Texture* ball_tex;
+	//Sfx=========================================
+
 
 };

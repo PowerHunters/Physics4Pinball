@@ -49,7 +49,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height , float degrees, bool dynamic = true);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0.0f);
 
 	// Complex bodies ====================================
 	PhysBody *CreateFlipper(b2Vec2 position, int* points, int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, b2RevoluteJoint *joint);

@@ -21,12 +21,15 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* contact);
+	void Reset();
 
 	//Flipper actions ===============================
 	void engageFlipper(PhysBody *flipper, float impulse);
 
 public:
 	// State =======================================
+	b2Vec2 init_position;
+	bool reset = false;
 	bool is_dead = false;
 	uint lifes;
 	uint points;

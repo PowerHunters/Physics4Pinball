@@ -168,8 +168,6 @@ update_status ModulePlayer::Update()
 		barrier = App->physics->CreateRectangle(397, 139, 33, 3, -60, false);
 		create_barrier = false;
 	}
-		
-
 	return UPDATE_CONTINUE;
 }
 

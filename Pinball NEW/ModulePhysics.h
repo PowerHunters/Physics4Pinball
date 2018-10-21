@@ -46,7 +46,7 @@ public:
 
 	//Basic bodies =======================================
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
-	PhysBody* CreateRectangle(int x, int y, int width, int height , bool dynamic = true);
+	PhysBody* CreateRectangle(int x, int y, int width, int height , float degrees, bool dynamic = true);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);

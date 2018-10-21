@@ -34,6 +34,7 @@ bool ModuleSceneIntro::Start()
 	AddStaticBodies();
 	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
+	sensor_barrier = App->physics->CreateRectangleSensor(370, 134, 60, 3, 90);
 	//Delete-------------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
@@ -69,9 +70,6 @@ void ModuleSceneIntro::AddStaticBodies()
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
-	
-
-
 
 	int BigStruct[52] = {
 		98, 402,

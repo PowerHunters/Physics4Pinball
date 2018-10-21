@@ -142,6 +142,10 @@ update_status ModulePlayer::Update()
 	SDL_Rect rect = { x ,  y, 33, 33 };
 	App->renderer->DrawQuad(rect , 255,255,255);
 
+	//--------Barrier----------------------------------------------
+	if (create_barrier == true)
+		barrier = App->physics->CreateRectangle(397, 139, 33, 3, -60, true);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -172,6 +176,15 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		}
 		// Set ball ================================================
 
+	}
+
+	if (ball == bodyA && App->scene_intro->sensor_barrier == bodyB && barrier == nullptr)
+	{
+		// Create barrier =================================
+		create_barrier = true;
+		// Destroy barrier if dead ================================================
+		//if (--lifes)
+		//	create_barrier = false;
 	}
 }
 

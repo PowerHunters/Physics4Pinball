@@ -90,7 +90,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height , bool dynamic)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, float degrees, bool dynamic)
 {
 	b2BodyDef body;
 
@@ -100,6 +100,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height , b
 		body.type = b2_staticBody;
 
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = DEGTORAD * degrees;
 
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;
@@ -249,7 +250,7 @@ PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int * points, int size, 
 PhysBody *ModulePhysics::CreateLauncher(int x, int y, int width, int height, b2PrismaticJoint* joint ,SDL_Texture* tex)
 {
 	PhysBody* fixed_launcher = App->physics->CreateRectangleSensor(x, y, width, height);
-	PhysBody* launcher = App->physics->CreateRectangle(x, y, width, height);
+	PhysBody* launcher = App->physics->CreateRectangle(x, y, width, height, 0);
 	
 	b2PrismaticJointDef joint_def;
 	joint_def.bodyA = launcher->body;

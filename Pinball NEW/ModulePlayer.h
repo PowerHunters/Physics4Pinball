@@ -31,12 +31,16 @@ public:
 	uint lifes;
 	uint points;
 
+	bool create_barrier = false;
+
 	// PhysBodies ==================================
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;
 	PhysBody* flipper_l = NULL;
-
+	PhysBody* barrier = NULL;
 	PhysBody* launcher = NULL;
+
+	//Launcher
 	b2Vec2 launcher_init_pos;
 	float impulse_force;
 

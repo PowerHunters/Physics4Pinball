@@ -34,11 +34,6 @@ public:
 	uint lifes;
 	uint points;
 
-	//Barriers
-	bool create_right_barrier = false;
-	bool create_left_barrier = true;
-	// bool destroy_left_barrier = false;
-
 	// PhysBodies ==================================
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;

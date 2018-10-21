@@ -19,12 +19,25 @@ public:
 	void AddStaticBodies();
 
 public:
-	//PhysBodies==================================
+
+	bool reset = false;
+
+	// PhysBodies==================================
 	PhysBody* sensor = NULL;
 	PhysBody* sensor_death = NULL;
+
+	// Barriers ------------------------------
+	bool create_right_barrier = false;
+	bool create_left_barrier = true;
+	bool destroy_right_barrier = false;
+	bool destroy_left_barrier = false;
+
+	PhysBody* right_barrier = NULL;
+	PhysBody* left_barrier = NULL;
 	PhysBody* sensor_barrier_right = NULL;
 	PhysBody* sensor_initial_barrier_left = NULL;
 	PhysBody* sensor_final_barrier_left = NULL;
+
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bouncers;
 

@@ -34,10 +34,14 @@ bool ModuleSceneIntro::Start()
 	AddStaticBodies();
 	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
-	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 3, 90);
-	sensor_initial_barrier_left = App->physics->CreateRectangleSensor(95, 165, 35, 3, 56);
-	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 3, 90);
-	//Delete-------------------------------------------------
+	// Barriers ---------------------------------------
+	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
+	sensor_barrier_right->listener = this;
+	sensor_initial_barrier_left = App->physics->CreateRectangleSensor(92, 167, 36, 8, 56);
+	sensor_initial_barrier_left->listener = this;
+	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 6, 90);
+	sensor_final_barrier_left->listener = this;
+	//Delete-------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
 	return ret;
@@ -54,6 +58,39 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	if (reset == true)
+	{
+		if (left_barrier == NULL) create_left_barrier = true;
+		if (right_barrier) destroy_right_barrier = true;
+		reset = false;
+	}
+
+	//--------Barriers----------------------------------------------
+	if (create_right_barrier == true)
+	{
+		right_barrier = App->physics->CreateRectangle(397, 139, 33, 6, -60, false);
+		create_right_barrier = false;
+	}
+	if (create_left_barrier == true)
+	{
+		left_barrier = App->physics->CreateRectangle(101, 159, 33, 6, 57, false);
+		create_left_barrier = false;
+	}
+
+	if (destroy_left_barrier == true)
+	{
+		left_barrier->body->GetWorld()->DestroyBody(left_barrier->body);
+		left_barrier = nullptr;
+		destroy_left_barrier = false;
+	}
+
+	if (destroy_right_barrier == true)
+	{
+		right_barrier->body->GetWorld()->DestroyBody(right_barrier->body);
+		right_barrier = nullptr;
+		destroy_right_barrier = false;
+	}
+
 	// All draw functions ======================================================
 	//------Background--------------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
@@ -63,8 +100,26 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* contact)
 {
+	if (sensor_barrier_right == bodyA && App->player->ball == bodyB && right_barrier == nullptr)
+	{
+		// Create barrier =================================
+		create_right_barrier = true;
+		// Destroy barrier if dead ================================================
+		//if (--lifes)
+		//	create_barrier = false;
+	}
 
+	if (sensor_final_barrier_left == bodyA && App->player->ball == bodyB && left_barrier == nullptr)
+	{
+		// Create barrier =================================
+		create_left_barrier = true;
+	}
 
+	if (sensor_initial_barrier_left == bodyA && App->player->ball == bodyB && left_barrier != nullptr)
+	{
+		// Destroy barrier =================================
+		destroy_left_barrier = true;
+	}
 }
 
 void ModuleSceneIntro::AddStaticBodies()

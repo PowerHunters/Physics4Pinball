@@ -135,51 +135,20 @@ update_status ModulePlayer::Update()
 		impulse_force = 0; //Sfx
 	}
 
-
-	//After being launched set speed to 0 again after reached center point
-	//if (METERS_TO_PIXELS(launcher->body->GetPosition().y )<= launcher_init_pos.y && METERS_TO_PIXELS(launcher->body->GetPosition().y)>= launcher_init_pos.y - 0.2f)
-	//{
-	//	b2Vec2 position(PIXEL_TO_METERS(launcher_init_pos.x), PIXEL_TO_METERS(launcher_init_pos.y));
-	//	launcher_joint->SetMotorSpeed(0);
-	//	launcher->body->SetTransform(position, 0);
-	//}
-
 	//--------Ball------------------------------------------------
 	if (ball != nullptr)
 	{
-		
 		int x, y;
 		ball->GetPosition(x, y);
 		SDL_Rect rect = { 0, 0, 22, 22 };
-		//App->renderer->Blit(ball_tex, x, y, &rect, 1.0f, RADTODEG*ball->body->GetAngle());
 		App->renderer->Blit(ball_tex, x, y, &rect);
-
 	}
 
-	//--------Starter----------------------------------------------
+	//--------Launcher----------------------------------------------
 	int x, y;
 	launcher->GetPosition(x, y);
 	SDL_Rect rect = { x ,  y, 33, 33 };
 	App->renderer->DrawQuad(rect , 255,255,255);
-
-	//--------Barriers----------------------------------------------
-	if (create_right_barrier == true)
-	{
-		right_barrier = App->physics->CreateRectangle(397, 139, 33, 3, -60, false);
-		create_right_barrier = false;
-	}
-	if (create_left_barrier == true)
-	{
-		left_barrier = App->physics->CreateRectangle(101, 159, 33, 3, 57, false);
-		create_left_barrier = false;
-	}
-	//if (destroy_left_barrier == true)
-	//{
-	//	//destroy left barrier
-	//	// ---
-
-	//	destroy_left_barrier = false;
-	//}
 
 	return UPDATE_CONTINUE;
 }
@@ -216,26 +185,6 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		}
 	}
 
-	if (ball == bodyA && App->scene_intro->sensor_barrier_right == bodyB && right_barrier == nullptr)
-	{
-		// Create barrier =================================
-		create_right_barrier = true;
-		// Destroy barrier if dead ================================================
-		//if (--lifes)
-		//	create_barrier = false;
-	}
-
-	if (ball == bodyA && App->scene_intro->sensor_initial_barrier_left == bodyB && left_barrier == nullptr)
-	{
-		// Destroy barrier =================================
-		//destroy_left_barrier = true;
-	}
-
-	if (ball == bodyA && App->scene_intro->sensor_final_barrier_left == bodyB && left_barrier == nullptr)
-	{
-		// Create barrier =================================
-		create_left_barrier = true;
-	}
 }
 
 void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)
@@ -252,5 +201,6 @@ void ModulePlayer::Reset ()
 	{
 		ball->body->SetLinearVelocity({ 0,0 });
 		ball->body->SetTransform( init_position, 0);
+		App->scene_intro->reset = true;
 	}
 }

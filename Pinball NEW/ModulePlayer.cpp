@@ -12,7 +12,7 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = NULL;
-	
+	lifes = 3;
 	init_position.x = PIXEL_TO_METERS(489);
 	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
@@ -180,11 +180,16 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
 		// Lifes logic =================================
-		lifes--;
+		--lifes;
 		if (lifes <= 0) {
 			is_dead = true;
 		}
+		else
 		// Set ball ================================================
+		{
+			Reset();
+		}
+		
 
 	}
 }
@@ -202,6 +207,6 @@ void ModulePlayer::Reset ()
 	if (ball)
 	{
 		ball->body->SetLinearVelocity({ 0,0 });
-		ball->body->SetTransform(init_position, 0);
+		ball->body->SetTransform(init_position, 0.0f);
 	}
 }

@@ -248,18 +248,18 @@ PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int * points, int size, 
 
 PhysBody *ModulePhysics::CreateLauncher(int x, int y, int width, int height, b2PrismaticJoint* joint ,SDL_Texture* tex)
 {
-	PhysBody* launcher = App->physics->CreateRectangle(x, y, width, height);
 	PhysBody* fixed_launcher = App->physics->CreateRectangleSensor(x, y, width, height);
+	PhysBody* launcher = App->physics->CreateRectangle(x, y, width, height);
 	
 	b2PrismaticJointDef joint_def;
-	joint_def.bodyA = fixed_launcher->body;
-	joint_def.bodyB = launcher->body;
-	joint_def.localAxisA.Set(0, -1);
+	joint_def.bodyA = launcher->body;
+	joint_def.bodyB = fixed_launcher->body;
+	joint_def.localAxisA.Set(0, 1);
 	joint_def.localAnchorA.Set(0,0);
 	joint_def.localAnchorB.Set(0,0);
 	joint_def.enableLimit = true;
 	joint_def.upperTranslation = 0;
-	joint_def.lowerTranslation = 0; //-1
+	joint_def.lowerTranslation = -1; //-1
 	joint_def.enableMotor = true;
 	joint_def.maxMotorForce = 500.0f;
 	joint_def.motorSpeed = 0.0f;

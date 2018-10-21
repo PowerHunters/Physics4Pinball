@@ -12,19 +12,6 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
-enum FLIPPER_SIDE
-{
-	LEFT_FLIPPER,
-	RIGHT_FLIPPER
-};
-
-//class FLIPPER : public PhysBody
-//{
-//public:
-//	FLIPPER(){}
-//	FLIPPER_SIDE	 side;
-//};
-
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -57,15 +44,18 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	//Basic bodies =======================================
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
 	PhysBody* CreateRectangle(int x, int y, int width, int height , bool dynamic = true);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float degrees = 0);
-	PhysBody *CreateStarter(int x, int y, int width, int height, SDL_Texture *tex = nullptr);
-	PhysBody *CreateFlipper(b2Vec2 position, int width, int height, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex = nullptr);
 
-	// b2ContactListener ---
+	// Complex bodies ====================================
+	PhysBody *CreateFlipper(b2Vec2 position, int* points, int size, b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, b2RevoluteJoint *joint);
+	PhysBody *CreateLauncher(int x, int y, int width, int height, b2PrismaticJoint * joint, SDL_Texture *tex = nullptr);
+
+	// b2ContactListener ================================
 	void BeginContact(b2Contact* contact);
 
 private:

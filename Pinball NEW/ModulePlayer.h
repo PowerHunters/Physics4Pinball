@@ -2,9 +2,13 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Box2D/Box2D/Box2D.h"
 
 class PhysBody;
+class b2RevoluteJoint;
+class b2PrismaticJoint;
 struct SDL_Texture;
+class b2Contact;
 
 class ModulePlayer : public Module
 {
@@ -16,7 +20,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* contact);
 
 	//Flipper actions ===============================
 	void engageFlipper(PhysBody *flipper, float impulse);
@@ -24,16 +28,23 @@ public:
 public:
 	float push_force = 0.0f;
 
-	//PhysBodies ==================================
+	// PhysBodies ==================================
 	PhysBody* ball = NULL;
 	PhysBody* flipper_r = NULL;
 	PhysBody* flipper_l = NULL;
-	PhysBody* starter = NULL;
 
-	//Textures ====================================
+	PhysBody* launcher = NULL;
+	b2Vec2 launcher_init_pos;
+	float impulse_force;
+	// Joints =======================================
+	b2RevoluteJoint* flipper_r_joint = NULL;
+	b2RevoluteJoint* flipper_l_joint = NULL;
+	b2PrismaticJoint* launcher_joint = NULL;
+
+	// Textures ====================================
 	SDL_Texture* ball_tex;
-	//SDL_Texture* starter_tex;
-	////Sfx=========================================
+
+	// Sfx=========================================
 	//uint flipper_fx;
 	//uint lose_fx;
 	//uint starter_fx;

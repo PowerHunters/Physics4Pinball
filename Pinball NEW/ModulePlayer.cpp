@@ -8,6 +8,7 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = NULL;
@@ -20,14 +21,40 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+	// Textures ======================================================
 	ball_tex = App->textures->Load("textures/ball.png");
+	// PhysBodies ====================================================
+	int left_flipper[8]
+	{
+		0,  12,
+		0 ,-12, 
+		70,  7, 
+		70 ,-7
+	};
 
-	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), 70, 18, b2Vec2(147, 920), -30 , 30 );
-	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), 70, 18, b2Vec2(320, 920), -30, 30);
+	int right_flipper[8]
+	{
+		0,  12,
+		0 ,-12,
+		-70,  7,
+		-70 ,-7
+	};
+	
+	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), left_flipper, 8, b2Vec2(147, 920), -30 , 30 , flipper_l_joint);
+	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), right_flipper, 8, b2Vec2(320, 920), -30, 30 , flipper_r_joint);
 
+	launcher_init_pos.x = 487.0f;
+	launcher_init_pos.y = 912.0f;
+	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 35, 35, launcher_joint);
 
+	if (flipper_r_joint == NULL)
+		LOG("flipper_r_joint null ======================================");
 
-	starter = App->physics->CreateStarter(470, 912, 36, 36, nullptr);
+	if (flipper_l_joint == NULL)
+		LOG("flipper_l_joint null ======================================");
+
+	if (launcher_joint == NULL)
+		LOG("launcher_joint ======================================");
 	/*starter_tex = App->textures->Load("textures/ball.png");*/
 	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
 	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
@@ -54,33 +81,54 @@ update_status ModulePlayer::Update()
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 
+	// Ball =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
 	{
 		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
 		ball->listener = this;
 	}
 
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		push_force -= 2.0f;
-		starter->Push(0, push_force);
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
-	{
-		push_force = 0;
-		/*App->audio->playFx(start_fx);*/
-	}
-
-
+	// Flippers =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_l, -9.0f);
+		engageFlipper(flipper_l, -13.0f);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_r, 9.0f);
+		engageFlipper(flipper_r, 13.0f);
+	}
+
+	// Launcher ==============================================================
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) 
+	{
+		launcher_joint->SetMotorSpeed(-2);
+		impulse_force += 0.5f;
+
+		if (impulse_force > 40)
+		{
+			impulse_force = 40;
+		}
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) 
+	{
+		launcher_joint->SetMotorSpeed(impulse_force);
+		impulse_force = 0; //Sfx
+	}
+	else if (launcher_joint->GetMotorSpeed() < 1) 
+	{
+		launcher->body->SetTransform(launcher_init_pos, 0);
+	}
+
+	//After being launched set speed to 0 again after reached center point
+	if (launcher->body->GetPosition().y < launcher_init_pos.y && launcher->body->GetPosition().y > launcher_init_pos.y - 0.01f)
+	{
+		launcher_joint->SetMotorSpeed(0);
+		
+	}
+	if (launcher->body->GetPosition().y < launcher_init_pos.y) //If the block pass through center, set it to center again
+	{
+		launcher->body->SetTransform(launcher_init_pos, 0);
 	}
 
 	// All draw functions ======================================================
@@ -96,25 +144,27 @@ update_status ModulePlayer::Update()
 
 	//--------Starter----------------------------------------------
 	int x, y;
-	starter->GetPosition(x, y);
+	launcher->GetPosition(x, y);
 	SDL_Rect rect = { x,  y, 36, 36 };
 	App->renderer->DrawQuad(rect , 255,255,255);
 
 	return UPDATE_CONTINUE;
 }
 
-void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
+void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* contact)
 {
+	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+
 	if (ball == bodyA && App->scene_intro->bouncers.find(bodyB) != -1)
 	{
+		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
+		// Aplly impulse =================================
+		b2Vec2 normal = worldManifold.normal;
+		normal *= 1.5f;
+		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}
-
-	if (ball == bodyA && App->scene_intro->sensor == bodyB)
-	{
-		App->audio->PlayFx(App->scene_intro->bonus_fx);
-	}
-
 }
 
 void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)

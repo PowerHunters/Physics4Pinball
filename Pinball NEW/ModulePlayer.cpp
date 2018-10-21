@@ -86,6 +86,12 @@ update_status ModulePlayer::Update()
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 
+	if (reset)
+	{
+		Reset();
+		reset = false;
+	}
+
 	// Ball =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
 	{
@@ -187,7 +193,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		else
 		// Set ball ================================================
 		{
-			Reset();
+			reset = true;
 		}
 		
 
@@ -207,6 +213,6 @@ void ModulePlayer::Reset ()
 	if (ball)
 	{
 		ball->body->SetLinearVelocity({ 0,0 });
-		ball->body->SetTransform(init_position, 0.0f);
+		ball->body->SetTransform( init_position, 0);
 	}
 }

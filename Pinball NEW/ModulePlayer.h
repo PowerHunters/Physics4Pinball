@@ -29,6 +29,7 @@ public:
 public:
 	// State =======================================
 	b2Vec2 init_position;
+	bool reset = false;
 	bool is_dead = false;
 	uint lifes;
 	uint points;

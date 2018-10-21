@@ -33,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	//PhyBodies==============================================
 	AddStaticBodies();
 	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
+	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
 	//Delete-------------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
@@ -68,6 +69,9 @@ void ModuleSceneIntro::AddStaticBodies()
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
+	
+
+
 
 	int BigStruct[52] = {
 		98, 402,
@@ -116,7 +120,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		80, 721
 	};
 
-	board_parts.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
+	bouncers.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
 
 	int RightStruct[26] = {
 		321, 846,
@@ -134,7 +138,7 @@ void ModuleSceneIntro::AddStaticBodies()
 		323, 842
 	};
 
-	board_parts.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
+	bouncers.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
 
 	int LeftLine[16] = {
 		49, 739,

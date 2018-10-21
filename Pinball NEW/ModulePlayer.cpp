@@ -12,7 +12,12 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = NULL;
+	
+	init_position.x = PIXEL_TO_METERS(489);
+	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
+	launcher_init_pos.x = 487.0f;
+	launcher_init_pos.y = 912.0f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -43,9 +48,6 @@ bool ModulePlayer::Start()
 	
 	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), left_flipper, 8, b2Vec2(147, 920), -30 , 30 , flipper_l_joint);
 	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), right_flipper, 8, b2Vec2(320, 920), -30, 30 , flipper_r_joint);
-
-	launcher_init_pos.x = 487.0f;
-	launcher_init_pos.y = 912.0f;
  	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 33, 33, launcher_joint);
 
 	if (flipper_r_joint == NULL)
@@ -56,6 +58,8 @@ bool ModulePlayer::Start()
 
 	if (launcher_joint == NULL)
 		LOG("launcher_joint ======================================");
+
+
 	/*starter_tex = App->textures->Load("textures/ball.png");*/
 	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
 	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
@@ -86,8 +90,15 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
 	{
 		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
+		ball->body->SetBullet(true);
 		ball->listener = this;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && ball)
+	{
+		Reset();
+	}
+
 
 	// Flippers =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
@@ -167,5 +178,13 @@ void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)
 	if (flipper)
 	{
 		flipper->body->ApplyAngularImpulse(impulse, true);
+	}
+}
+
+void ModulePlayer::Reset ()
+{
+	if (ball)
+	{
+		ball->body->SetTransform(init_position, 0);
 	}
 }

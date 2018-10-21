@@ -171,6 +171,19 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		ball->body->SetLinearVelocity({ 0.0f, 0.0f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}
+
+	if (ball == bodyA && App->scene_intro->sensor_death == bodyB)
+	{
+		// Sfx ===========================================
+		App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
+		// Lifes logic =================================
+		lifes--;
+		if (lifes <= 0) {
+			is_dead = true;
+		}
+		// Set ball ================================================
+
+	}
 }
 
 void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)

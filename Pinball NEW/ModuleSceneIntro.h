@@ -21,6 +21,7 @@ public:
 public:
 	//PhysBodies==================================
 	PhysBody* sensor = NULL;
+	PhysBody* sensor_death = NULL;
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bouncers;
 

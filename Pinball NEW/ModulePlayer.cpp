@@ -162,12 +162,25 @@ update_status ModulePlayer::Update()
 	SDL_Rect rect = { x ,  y, 33, 33 };
 	App->renderer->DrawQuad(rect , 255,255,255);
 
-	//--------Barrier----------------------------------------------
-	if (create_barrier == true)
+	//--------Barriers----------------------------------------------
+	if (create_right_barrier == true)
 	{
-		barrier = App->physics->CreateRectangle(397, 139, 33, 3, -60, false);
-		create_barrier = false;
+		right_barrier = App->physics->CreateRectangle(397, 139, 33, 3, -60, false);
+		create_right_barrier = false;
 	}
+	if (create_left_barrier == true)
+	{
+		left_barrier = App->physics->CreateRectangle(101, 159, 33, 3, 57, false);
+		create_left_barrier = false;
+	}
+	//if (destroy_left_barrier == true)
+	//{
+	//	//destroy left barrier
+	//	// ---
+
+	//	destroy_left_barrier = false;
+	//}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -201,17 +214,27 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		{
 			reset = true;
 		}
-		
-
 	}
 
-	if (ball == bodyA && App->scene_intro->sensor_barrier == bodyB && barrier == nullptr)
+	if (ball == bodyA && App->scene_intro->sensor_barrier_right == bodyB && right_barrier == nullptr)
 	{
 		// Create barrier =================================
-		create_barrier = true;
+		create_right_barrier = true;
 		// Destroy barrier if dead ================================================
 		//if (--lifes)
 		//	create_barrier = false;
+	}
+
+	if (ball == bodyA && App->scene_intro->sensor_initial_barrier_left == bodyB && left_barrier == nullptr)
+	{
+		// Destroy barrier =================================
+		//destroy_left_barrier = true;
+	}
+
+	if (ball == bodyA && App->scene_intro->sensor_final_barrier_left == bodyB && left_barrier == nullptr)
+	{
+		// Create barrier =================================
+		create_left_barrier = true;
 	}
 }
 

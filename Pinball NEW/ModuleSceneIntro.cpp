@@ -34,7 +34,9 @@ bool ModuleSceneIntro::Start()
 	AddStaticBodies();
 	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
-	sensor_barrier = App->physics->CreateRectangleSensor(370, 134, 60, 3, 90);
+	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 3, 90);
+	sensor_initial_barrier_left = App->physics->CreateRectangleSensor(95, 165, 35, 3, 56);
+	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 3, 90);
 	//Delete-------------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 

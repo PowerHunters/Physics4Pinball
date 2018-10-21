@@ -158,28 +158,41 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	b2WorldManifold worldManifold;
 	contact->GetWorldManifold(&worldManifold);
 
-	if (ball == bodyA && App->scene_intro->bouncers.find(bodyB) != -1)
+	// Bottom bumpers ======================================================
+	if (ball == bodyA && App->scene_intro->bottom_bumpers.find(bodyB) != -1)
 	{
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
 		// Aplly impulse =================================
 		b2Vec2 normal = worldManifold.normal;
+		normal.x *= 1.5f;
+		normal.y *= 0.2f;
+		ball->body->SetLinearVelocity({ 0.0f ,ball->body->GetLinearVelocity().y * 0.2f });
+		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
+	}
+	// Normal bumpers ======================================================
+	if (ball == bodyA && App->scene_intro->bumpers.find(bodyB) != -1)
+	{
+		// Sfx =======================================
+		App->audio->PlayFx(App->scene_intro->bonus_fx);
+		// Aplly impulse =============================
+		b2Vec2 normal = worldManifold.normal;
 		normal *= 1.5f;
 		ball->body->SetLinearVelocity({ 0.0f, 0.0f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}
-
+	// Death sensor ======================================================
 	if (ball == bodyA && App->scene_intro->sensor_death == bodyB)
 	{
-		// Sfx ===========================================
+		// Sfx =======================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
-		// Lifes logic =================================
+		// Lifes logic ===============================
 		--lifes;
 		if (lifes <= 0) {
 			is_dead = true;
 		}
 		else
-		// Set ball ================================================
+		// Set ball ==================================
 		{
 			reset = true;
 		}

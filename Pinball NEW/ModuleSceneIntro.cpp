@@ -124,9 +124,45 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 
 void ModuleSceneIntro::AddStaticBodies()
 {
-	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
-	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
-	bouncers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
+	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
+	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
+	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
+
+	int LeftStruct[26] = {
+	80, 727,
+	80, 821,
+	80, 827,
+	85, 831,
+	130, 856,
+	138, 857,
+	142, 854,
+	145, 850,
+	144, 844,
+	100, 720,
+	96, 716,
+	84, 717,
+	80, 721
+	};
+
+	bottom_bumpers.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
+
+	int RightStruct[26] = {
+		321, 846,
+		322, 852,
+		328, 856,
+		334, 857,
+		340, 855,
+		383, 829,
+		386, 825,
+		386, 722,
+		382, 716,
+		374, 715,
+		367, 717,
+		364, 722,
+		323, 842
+	};
+
+	bottom_bumpers.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
 
 	int BigStruct[52] = {
 		98, 402,
@@ -159,41 +195,6 @@ void ModuleSceneIntro::AddStaticBodies()
 
 	board_parts.add(App->physics->CreateChain(0, 0, BigStruct, 52, false));
 
-	int LeftStruct[26] = {
-		80, 727,
-		80, 821,
-		80, 827,
-		85, 831,
-		130, 856,
-		138, 857,
-		142, 854,
-		145, 850,
-		144, 844,
-		100, 720,
-		96, 716,
-		84, 717,
-		80, 721
-	};
-
-	bouncers.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
-
-	int RightStruct[26] = {
-		321, 846,
-		322, 852,
-		328, 856,
-		334, 857,
-		340, 855,
-		383, 829,
-		386, 825,
-		386, 722,
-		382, 716,
-		374, 715,
-		367, 717,
-		364, 722,
-		323, 842
-	};
-
-	bouncers.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
 
 	int LeftLine[16] = {
 		49, 739,

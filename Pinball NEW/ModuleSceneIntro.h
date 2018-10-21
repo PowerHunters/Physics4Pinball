@@ -39,7 +39,8 @@ public:
 	PhysBody* sensor_final_barrier_left = NULL;
 
 	p2List<PhysBody*> board_parts;
-	p2List<PhysBody*> bouncers;
+	p2List<PhysBody*> bumpers;
+	p2List<PhysBody*> bottom_bumpers;
 
 	//Textures====================================
 	SDL_Texture* background_tex;

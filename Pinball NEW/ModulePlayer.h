@@ -26,7 +26,10 @@ public:
 	void engageFlipper(PhysBody *flipper, float impulse);
 
 public:
-	float push_force = 0.0f;
+	// State =======================================
+	bool is_dead = false;
+	uint lifes;
+	uint points;
 
 	// PhysBodies ==================================
 	PhysBody* ball = NULL;
@@ -36,6 +39,7 @@ public:
 	PhysBody* launcher = NULL;
 	b2Vec2 launcher_init_pos;
 	float impulse_force;
+
 	// Joints =======================================
 	b2RevoluteJoint* flipper_r_joint = NULL;
 	b2RevoluteJoint* flipper_l_joint = NULL;
@@ -44,7 +48,7 @@ public:
 	// Textures ====================================
 	SDL_Texture* ball_tex;
 
-	// Sfx=========================================
+	// Sfx==========================================
 	//uint flipper_fx;
 	//uint lose_fx;
 	//uint starter_fx;

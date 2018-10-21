@@ -126,12 +126,6 @@ update_status ModulePlayer::Update()
 		launcher_joint->SetMotorSpeed(0);
 		launcher->body->SetTransform(launcher_init_pos, 0);
 	}
-	//if (launcher->body->GetPosition().y < launcher_init_pos.y) //If the block pass through center, set it to center again
-	//{
-	//	launcher->body->SetTransform(launcher_init_pos, 0);
-	//}
-
-	// All draw functions ======================================================
 
 	//--------Ball------------------------------------------------
 	if (ball != nullptr)
@@ -166,9 +160,6 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		ball->body->SetLinearVelocity({ 0.0f, 0.0f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}
-
-
-
 }
 
 void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)

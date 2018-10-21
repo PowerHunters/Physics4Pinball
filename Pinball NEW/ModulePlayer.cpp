@@ -17,7 +17,7 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
 	launcher_init_pos.x = 487.0f;
-	launcher_init_pos.y = 912.0f;
+	launcher_init_pos.y = 912.0f + 16;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -99,7 +99,6 @@ update_status ModulePlayer::Update()
 		Reset();
 	}
 
-
 	// Flippers =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
@@ -132,19 +131,23 @@ update_status ModulePlayer::Update()
 
 
 	//After being launched set speed to 0 again after reached center point
-	if (launcher->body->GetPosition().y <= launcher_init_pos.y + 0.2f && launcher->body->GetPosition().y >= launcher_init_pos.y - 0.2f)
-	{
-		launcher_joint->SetMotorSpeed(0);
-		launcher->body->SetTransform(launcher_init_pos, 0);
-	}
+	//if (METERS_TO_PIXELS(launcher->body->GetPosition().y )<= launcher_init_pos.y && METERS_TO_PIXELS(launcher->body->GetPosition().y)>= launcher_init_pos.y - 0.2f)
+	//{
+	//	b2Vec2 position(PIXEL_TO_METERS(launcher_init_pos.x), PIXEL_TO_METERS(launcher_init_pos.y));
+	//	launcher_joint->SetMotorSpeed(0);
+	//	launcher->body->SetTransform(position, 0);
+	//}
 
 	//--------Ball------------------------------------------------
 	if (ball != nullptr)
 	{
+		
 		int x, y;
 		ball->GetPosition(x, y);
 		SDL_Rect rect = { 0, 0, 22, 22 };
+		//App->renderer->Blit(ball_tex, x, y, &rect, 1.0f, RADTODEG*ball->body->GetAngle());
 		App->renderer->Blit(ball_tex, x, y, &rect);
+
 	}
 
 	//--------Starter----------------------------------------------
@@ -198,6 +201,7 @@ void ModulePlayer::Reset ()
 {
 	if (ball)
 	{
+		ball->body->SetLinearVelocity({ 0,0 });
 		ball->body->SetTransform(init_position, 0);
 	}
 }

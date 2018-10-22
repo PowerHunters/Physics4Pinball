@@ -290,7 +290,7 @@ PhysBody *ModulePhysics::CreateLauncher(int x, int y, int width, int height, b2P
 	joint_def.upperTranslation = 0;
 	joint_def.lowerTranslation = -1; //-1
 	joint_def.enableMotor = true;
-	joint_def.maxMotorForce = 500.0f;
+	joint_def.maxMotorForce = 800.0f;
 	joint_def.motorSpeed = 0.0f;
 	
 	App->player->launcher_joint = (b2PrismaticJoint*)world->CreateJoint(&joint_def);

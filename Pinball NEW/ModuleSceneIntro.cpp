@@ -67,7 +67,7 @@ bool ModuleSceneIntro::Start()
 	// Barriers ---------------------------------------
 	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
 	sensor_barrier_right->listener = this;
-	sensor_initial_barrier_left = App->physics->CreateRectangleSensor(92, 167, 36, 8, 56);
+	sensor_initial_barrier_left = App->physics->CreateRectangleSensor(78, 188, 36, 10, 50);
 	sensor_initial_barrier_left->listener = this;
 	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 6, 90);
 	sensor_final_barrier_left->listener = this;
@@ -94,10 +94,25 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (left_barrier == NULL) create_left_barrier = true;
 		if (right_barrier) destroy_right_barrier = true;
+
+
+
 		reset = false;
 	}
 
 	//--------Barriers----------------------------------------------
+	if (destroy_left_barrier == true)
+	{
+		App->physics->DestroyPhysBody(left_barrier);
+		left_barrier = nullptr;
+		destroy_left_barrier = false;
+	}
+	if (destroy_right_barrier == true)
+	{
+		App->physics->DestroyPhysBody(right_barrier);
+		right_barrier = nullptr;
+		destroy_right_barrier = false;
+	}
 	if (create_right_barrier == true)
 	{
 		right_barrier = App->physics->CreateRectangle(397, 139, 33, 6, -60, false);
@@ -109,19 +124,6 @@ update_status ModuleSceneIntro::Update()
 		create_left_barrier = false;
 	}
 
-	if (destroy_left_barrier == true)
-	{
-		App->physics->DestroyPhysBody(left_barrier);
-		left_barrier = nullptr;
-		destroy_left_barrier = false;
-	}
-
-	if (destroy_right_barrier == true)
-	{
-		App->physics->DestroyPhysBody(right_barrier);
-		right_barrier = nullptr;
-		destroy_right_barrier = false;
-	}
 	// --------Combo------------------------------------------- 
 
 	if (combo_delay)
@@ -350,9 +352,8 @@ void ModuleSceneIntro::AddStaticBodies()
 		88, 402,
 		94, 403
 	};
-
+	
 	board_parts.add(App->physics->CreateChain(0, 0, BigStruct, 52, false));
-
 
 	int LeftLine[16] = {
 		49, 739,

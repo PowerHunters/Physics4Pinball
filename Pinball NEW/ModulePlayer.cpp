@@ -46,8 +46,8 @@ bool ModulePlayer::Start()
 		-70 ,-7
 	};
 	
-	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), left_flipper, 8, b2Vec2(147, 920), -30 , 40 , flipper_l_joint);
-	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), right_flipper, 8, b2Vec2(320, 920), -40, 30, flipper_r_joint);
+	flipper_l = App->physics->CreateFlipper(b2Vec2(175, 918), left_flipper, 8, b2Vec2(143, 918), -30 , 40 , flipper_l_joint);
+	flipper_r = App->physics->CreateFlipper(b2Vec2(293, 918), right_flipper, 8, b2Vec2(325, 918), -40, 30, flipper_r_joint);
  	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 33, 33, launcher_joint);
 
 	if (flipper_r_joint == NULL)
@@ -123,9 +123,9 @@ update_status ModulePlayer::Update()
 		launcher_joint->SetMotorSpeed(-2);
 		impulse_force += 0.5f;
 
-		if (impulse_force > 40)
+		if (impulse_force > 60)
 		{
-			impulse_force = 40;
+			impulse_force = 60;
 		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) 
@@ -176,8 +176,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
 		// Aplly impulse =============================
 		b2Vec2 normal = worldManifold.normal;
-		normal.x *= 1.8f;
-	/*	normal.y *= 0.4f;*/
+		normal *= 1.8f;
 		ball->body->SetLinearVelocity({ 0.0f, 0.0f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}

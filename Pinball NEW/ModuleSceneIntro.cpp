@@ -48,6 +48,15 @@ bool ModuleSceneIntro::Start()
 	combo_letters[7].position = { 244,678 };
 	combo_letters[8].position = { 296,678 };
 
+	pos_multiplier_bonus[0] = { 251, 825 };
+	pos_multiplier_bonus[1] = { 251, 799 };
+	pos_multiplier_bonus[2] = { 251, 773 };
+	pos_multiplier_bonus[3] = { 251, 747 };
+
+	pos_magnet_bonus[0] = { 366,561 };
+	pos_magnet_bonus[1] = { 382,536 };
+	pos_magnet_bonus[2] = { 394,511 };
+
 	// PhyBodies ==============================================
 	AddStaticBodies();
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
@@ -165,15 +174,23 @@ update_status ModuleSceneIntro::Update()
 	{
 		activate_final_target = true;
 	}
-	// --------Bonus--------------------------------------------
-	multiplier_bonus[0] = {251, 825};
-	multiplier_bonus[1] = {251, 799 };
-	multiplier_bonus[2] = {251, 773 };
-	multiplier_bonus[3] = {251, 747 };
+	// --------Bonuses--------------------------------------------
 
-	magnet_bonus[0] = { 366,561 };
-	magnet_bonus[1] = { 382,536 };
-	magnet_bonus[2] = { 394,511 };
+	if (keep_player_magnet)
+	{
+		if (keep_inside_frames == KEEP_INSIDE_FRAMES)
+		{
+			keep_inside_frames = 0;
+			keep_player_magnet = false;
+		}
+		else
+		{
+			App->player->ball->body->SetLinearVelocity({0,0});
+			App->player->ball->body->SetTransform(magnet_hole->body->GetPosition(), 0);
+			++keep_inside_frames;
+		}
+			
+	}
 
 	// All draw functions ======================================================
 
@@ -208,7 +225,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 		destroy_left_barrier = true;
 		return;
 	}
-
+	else if (magnet_hole == bodyA && App->player->ball == bodyB && left_barrier)
+	{
+		keep_player_magnet = true;
+		return;
+	}
 	// Targets ========================================================================
 	else if (final_target && final_target == bodyA && App->player->ball == bodyB && activate_final_target)
 	{

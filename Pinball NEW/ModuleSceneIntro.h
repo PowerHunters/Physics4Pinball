@@ -4,8 +4,8 @@
 #include "p2Point.h"
 #include "Globals.h"
 
-#define COMBO_DELAY_FRAMES 10
-
+#define COMBO_DELAY_FRAMES 200
+#define KEEP_INSIDE_FRAMES 60
 class PhysBody;
 
 struct Combo_letter
@@ -48,17 +48,17 @@ public:
 	Combo_letter combo_letters[9];
 	uint combo_letters_amount = 0;
 	int combo_delay_frames = 0;
-	bool combo_draw = true;
 	bool combo_delay = false;
-	bool combo_intermittent = false;
 	bool activate_final_target = false;
 	bool create_targets = true;
 	PhysBody* targets[4];
 	PhysBody* final_target = NULL;
 
-	//bonuses
-	iPoint multiplier_bonus[4];
-	iPoint magnet_bonus[3];
+	// Bonuses ---------------------------------
+	int keep_inside_frames = 0;
+	iPoint pos_multiplier_bonus[4];
+	iPoint pos_magnet_bonus[3];
+	bool keep_player_magnet;
 
 	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;

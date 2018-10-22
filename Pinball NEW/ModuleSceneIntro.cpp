@@ -30,6 +30,8 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	// Textures ===============================================
 	background_tex = App->textures->Load("textures/Pinball.png");
+	combo_letters_tex = App->textures->Load("textures/chocolate.png");
+	
 	// Fx =====================================================
 	int width = 36, height = 36;
 	for (int i = 0; i < 9; ++i)
@@ -45,7 +47,6 @@ bool ModuleSceneIntro::Start()
 	combo_letters[6].position = { 192,678 };
 	combo_letters[7].position = { 244,678 };
 	combo_letters[8].position = { 296,678 };
-	
 
 	// PhyBodies ==============================================
 	AddStaticBodies();
@@ -112,8 +113,26 @@ update_status ModuleSceneIntro::Update()
 		destroy_right_barrier = false;
 	}
 	// --------Combo------------------------------------------- 
-	
-	if (create_targets) 
+	if (combo_delay)
+	{
+		if (combo_delay_frames == COMBO_DELAY_FRAMES) {
+
+			combo_delay_frames = 0;
+			create_targets = true;
+			combo_delay = false;
+			activate_final_target = false;
+		}
+		else
+			++combo_delay_frames;
+	}
+
+	if (final_target && final_target->to_delete == true)
+	{
+		App->physics->DestroyPhysBody(final_target);
+		final_target = nullptr;
+	}
+
+	if (create_targets)
 	{
 		final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
 		final_target->listener = this;
@@ -128,13 +147,13 @@ update_status ModuleSceneIntro::Update()
 
 		create_targets = false;
 	}
-	
+
 	int count = 0;
 	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
 	{
 		if (targets[i] && targets[i]->to_delete == true)
 		{
-			App->physics->DestroyPhysBody(targets[i]); 
+			App->physics->DestroyPhysBody(targets[i]);
 			targets[i] = nullptr;
 		}
 		if (targets[i] == nullptr)
@@ -144,16 +163,18 @@ update_status ModuleSceneIntro::Update()
 	{
 		activate_final_target = true;
 	}
-	
+
 	// All draw functions ======================================================
 
 	// --------Background---------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
 	// -------Combo letters ----------------------------------------
+
 	for (uint i = 0; i < combo_letters_amount; ++i)
 	{
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
+
 
 	return UPDATE_CONTINUE;
 }
@@ -178,14 +199,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 	}
 
 	// Targets ========================================================================
-	else if (final_target != nullptr && final_target == bodyA && App->player->ball == bodyB && activate_final_target)
+	else if (final_target && final_target == bodyA && App->player->ball == bodyB && activate_final_target)
 	{
-		activate_final_target = false;
+	/*	activate_final_target = false;*/
 		final_target->to_delete = true;
-		++combo_letters_amount;
+		if (combo_letters_amount < 8) 
+		{
+			++combo_letters_amount;
+		}
+		else 
+		{
+			App->player->points += 1000000;
+			combo_letters_amount = 0;
+		}
+		combo_delay = true;
 	}
 
-	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
+	for (uint i = 0; (i < 4) && (combo_delay == false); ++i)
 	{
 		if (targets[i] &&  targets[i] == bodyA && App->player->ball == bodyB )
 		{

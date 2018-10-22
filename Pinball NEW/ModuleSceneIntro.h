@@ -4,6 +4,8 @@
 #include "p2Point.h"
 #include "Globals.h"
 
+#define COMBO_DELAY_FRAMES 300
+
 class PhysBody;
 
 struct Combo_letter
@@ -45,6 +47,10 @@ public:
 	// Chocolate combo -------------------------
 	Combo_letter combo_letters[9];
 	uint combo_letters_amount = 0;
+	int combo_delay_frames = 0;
+	bool combo_draw = true;
+	bool combo_delay = false;
+	bool combo_intermittent = false;
 	bool activate_final_target = false;
 	bool create_targets = true;
 	PhysBody* targets[4];

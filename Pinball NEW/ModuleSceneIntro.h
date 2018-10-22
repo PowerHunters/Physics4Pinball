@@ -14,6 +14,13 @@ struct Combo_letter
 	SDL_Rect actived_rect;
 };
 
+enum class Bonuses : int
+{
+	extra_ball = 0,
+	add_50k = 1,
+	advance_multiplier = 2
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -59,9 +66,9 @@ public:
 	bool keep_player_magnet;
 	bool keep_player_top;
 	iPoint pos_multiplier_bonus[4];
-	SDL_Rect multiplier_rect;
+	SDL_Rect points_rect;
+	Bonuses current_bonus = Bonuses::extra_ball;
 	iPoint pos_magnet_bonus[3];
-	SDL_Rect bonus_rect;
 
 	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;

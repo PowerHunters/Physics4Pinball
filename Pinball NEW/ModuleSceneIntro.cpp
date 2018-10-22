@@ -33,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("textures/Pinball.png");
 	combo_letters_tex = App->textures->Load("textures/chocolate.png");
 	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
+	points_rect = {0,0,19,19};
 	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
 	// Fx =====================================================
 	int width = 36, height = 36;
@@ -217,11 +218,10 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
-
 	//--------Bonus Points-----------------------------------------
 
-
-
+	App->renderer->Blit(multiplier_tex, pos_multiplier_bonus[ App->ui->multiplier -1].x, pos_multiplier_bonus[App->ui->multiplier - 1].y, &points_rect);
+	App->renderer->Blit(bonus_tex, pos_magnet_bonus[(int)current_bonus].x, pos_magnet_bonus[(int)current_bonus].y, &points_rect);
 	return UPDATE_CONTINUE;
 }
 

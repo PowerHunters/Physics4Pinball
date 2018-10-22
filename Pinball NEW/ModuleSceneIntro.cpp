@@ -64,6 +64,7 @@ bool ModuleSceneIntro::Start()
 	sensor_final_barrier_left->listener = this;
 	// Delete-------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
+	chocolate_combo_sfx = App->audio->LoadFx("sfx/chocolate_combo.wav");
 
 	return ret;
 }
@@ -219,6 +220,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 		}
 		else 
 		{
+			App->audio->PlayFx(chocolate_combo_sfx);
 			App->player->points += 1000000;
 			combo_letters_amount = 0;
 		}

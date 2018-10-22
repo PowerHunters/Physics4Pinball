@@ -4,7 +4,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 
-#define COMBO_DELAY_FRAMES 300
+#define COMBO_DELAY_FRAMES 10
 
 class PhysBody;
 
@@ -75,9 +75,10 @@ public:
 	SDL_Rect pinball_rect;
 
 	// Sfx ========================================
-
+	uint chocolate_combo_sfx;
 
 
 	//Delete------------------------
 	uint bonus_fx;
+
 };

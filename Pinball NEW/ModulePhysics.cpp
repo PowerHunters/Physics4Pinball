@@ -73,13 +73,15 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 	body_clicked = NULL;
 
 	b2Body* b = world->CreateBody(&body);
+	b2MassData* data = nullptr;
+	b->SetGravityScale(1.6f);
 
 	b2CircleShape shape;
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
 
+	fixture.density = 1.0f;
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();

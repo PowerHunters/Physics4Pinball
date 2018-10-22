@@ -29,6 +29,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	bool to_delete = false;
 	SDL_Texture* texture;
 };
 
@@ -43,6 +44,8 @@ public:
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
+
+	void DestroyPhysBody(PhysBody * item);
 
 	//Basic bodies =======================================
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);

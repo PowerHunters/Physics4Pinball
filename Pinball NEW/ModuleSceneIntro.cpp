@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("textures/Pinball.png");
 	// Fx =====================================================
 	int width = 36, height = 36;
-	for (int i = 0; i > 9; ++i)
+	for (int i = 0; i < 9; ++i)
 	{
 		combo_letters[i].actived_rect = {i*width , 0, width, height };
 	}
@@ -70,6 +70,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	// Logic ==================================================================
 	if (reset == true)
 	{
 		if (left_barrier == NULL) create_left_barrier = true;
@@ -91,24 +92,42 @@ update_status ModuleSceneIntro::Update()
 
 	if (destroy_left_barrier == true)
 	{
-		left_barrier->body->GetWorld()->DestroyBody(left_barrier->body);
+		App->physics->DestroyPhysBody(left_barrier);
 		left_barrier = nullptr;
 		destroy_left_barrier = false;
 	}
 
 	if (destroy_right_barrier == true)
 	{
-		right_barrier->body->GetWorld()->DestroyBody(right_barrier->body);
+		App->physics->DestroyPhysBody(right_barrier);
 		right_barrier = nullptr;
 		destroy_right_barrier = false;
 	}
+	// --------Combo------------------------------------------- 
+	int count = 0;
+	for (uint i = 0; i < 4; ++i)
+	{
+		if (targets[i] && targets[i]->to_delete == true)
+		{
+			App->physics->DestroyPhysBody(targets[i]); 
+			targets[i] = nullptr;
+		}
+		if (targets[i] == nullptr)
+			++count;
+	}
 
+	if (count == 4)
+	{
+		
+	}
+	
 	// All draw functions ======================================================
-	// Background--------------------------------------------
+
+	// --------Background---------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
-	// Combo letters ----------------------------------------
+	// -------Combo letters ----------------------------------------
 	SDL_Rect rect;
-	for (uint i = 0; i > 9; ++i)
+	for (uint i = 0; i < 9; ++i)
 	{
 		if (combo_letters[i].activated)
 			App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
@@ -119,25 +138,36 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* contact)
 {
+	// Sensors ========================================================================
 	if (sensor_barrier_right == bodyA && App->player->ball == bodyB && right_barrier == nullptr)
 	{
 		// Create barrier =================================
 		create_right_barrier = true;
-		// Destroy barrier if dead ================================================
-		//if (--lifes)
-		//	create_barrier = false;
+		return;
 	}
 
-	if (sensor_final_barrier_left == bodyA && App->player->ball == bodyB && left_barrier == nullptr)
+	else if (sensor_final_barrier_left == bodyA && App->player->ball == bodyB && left_barrier == nullptr)
 	{
 		// Create barrier =================================
 		create_left_barrier = true;
+		return;
 	}
 
-	if (sensor_initial_barrier_left == bodyA && App->player->ball == bodyB && left_barrier != nullptr)
+	else if (sensor_initial_barrier_left == bodyA && App->player->ball == bodyB && left_barrier != nullptr)
 	{
 		// Destroy barrier =================================
 		destroy_left_barrier = true;
+		return;
+	}
+	// Targets ========================================================================
+
+	for (uint i = 0; i < 4; ++i)
+	{
+		if (targets[i] &&  targets[i] == bodyA && App->player->ball == bodyB )
+		{
+			targets[i]->to_delete = true;
+			break;
+		}
 	}
 }
 

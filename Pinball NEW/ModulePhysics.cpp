@@ -501,3 +501,16 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA, contact);
 }
+
+void ModulePhysics::DestroyPhysBody(PhysBody * item)
+{
+	if (item == nullptr)
+		return;
+
+	if (item->body != nullptr)
+	{
+		item->body->GetWorld()->DestroyBody(item->body);
+	}
+
+	delete item;
+}

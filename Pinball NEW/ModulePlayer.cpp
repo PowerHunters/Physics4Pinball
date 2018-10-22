@@ -12,7 +12,7 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = NULL;
-	lifes = 3;
+	lifes = 5;
 	init_position.x = PIXEL_TO_METERS(489);
 	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
@@ -159,7 +159,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	contact->GetWorldManifold(&worldManifold);
 
 	// Bottom bumpers ======================================================
-	if (ball == bodyA && App->scene_intro->bottom_bumpers.find(bodyB) != -1)
+	if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
 	{
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);

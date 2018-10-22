@@ -32,8 +32,13 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("textures/Pinball.png");
 	//PhyBodies==============================================
 	AddStaticBodies();
-	sensor = App->physics->CreateRectangleSensor(200, 500, 10,60, 45);
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
+	final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
+	final_target->listener = this;
+	top_hole = App->physics->CreateCircle(237, 167, 17, false);
+	top_hole->listener = this;
+	magnet_hole = App->physics->CreateCircle(438, 281, 17, false);
+	magnet_hole->listener = this;
 	// Barriers ---------------------------------------
 	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
 	sensor_barrier_right->listener = this;
@@ -124,10 +129,18 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 
 void ModuleSceneIntro::AddStaticBodies()
 {
+	//Bumpers============================================
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
+	//Targets============================================
+	targets.add (App->physics->CreateRectangleSensor(106, 279, 10, 39, 50));//left-bottom
+	targets.add(App->physics->CreateRectangleSensor(142, 250, 9, 39, 50));//left-upper
+	targets.add(App->physics->CreateRectangleSensor(318, 242, 9, 39, -50));//right-upper
+	targets.add(App->physics->CreateRectangleSensor(355, 271, 10, 39, -50));//right-bottom
+	//listeners
 
+	//Slingshots============================================
 	int LeftStruct[26] = {
 	80, 727,
 	80, 821,
@@ -144,7 +157,7 @@ void ModuleSceneIntro::AddStaticBodies()
 	80, 721
 	};
 
-	bottom_bumpers.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
+	slingshots.add(App->physics->CreateChain(0, 0, LeftStruct, 26, false));
 
 	int RightStruct[26] = {
 		321, 846,
@@ -162,8 +175,9 @@ void ModuleSceneIntro::AddStaticBodies()
 		323, 842
 	};
 
-	bottom_bumpers.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
+	slingshots.add(App->physics->CreateChain(0, 0, RightStruct, 26, false));
 
+	//Board parts=============================================================
 	int BigStruct[52] = {
 		98, 402,
 		102, 397,

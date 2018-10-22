@@ -159,8 +159,10 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	contact->GetWorldManifold(&worldManifold);
 
 	// Slingshots ======================================================
-	 if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
+	if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
 	{
+		// Add points ================================
+		App->ui->AddPoints(1000);
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
 		// Aplly impulse =================================
@@ -169,11 +171,12 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		normal.y *= 0.2f;
 		ball->body->SetLinearVelocity({ 0.0f ,ball->body->GetLinearVelocity().y * 0.2f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
-		App->ui->current_score += 1000;
 	}
 	//  Bumpers ======================================================
 	else if (ball == bodyA && App->scene_intro->bumpers.find(bodyB) != -1)
 	{
+		// Add points ================================
+		App->ui->AddPoints(500);
 		// Sfx =======================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
 		// Aplly impulse =============================
@@ -193,12 +196,11 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 			is_dead = true;
 		}
 		else
-		// Set ball ==================================
+			// Set ball ==================================
 		{
 			reset = true;
 		}
 	}
-
 }
 
 void ModulePlayer::engageFlipper(PhysBody *flipper, float impulse)

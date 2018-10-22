@@ -42,9 +42,9 @@ bool ModuleSceneIntro::Start()
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
 	final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
 	final_target->listener = this;
-	top_hole = App->physics->CreateCircle(237, 167, 17, false);
+	top_hole = App->physics->CreateCircleIsSensor(237, 167, 17);
 	top_hole->listener = this;
-	magnet_hole = App->physics->CreateCircle(438, 281, 17, false);
+	magnet_hole = App->physics->CreateCircleIsSensor(438, 281, 17);
 	magnet_hole->listener = this;
 	// Barriers ---------------------------------------
 	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
@@ -150,12 +150,14 @@ void ModuleSceneIntro::AddStaticBodies()
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
 	//Targets============================================
-	targets.add (App->physics->CreateRectangleSensor(106, 279, 10, 39, 50));//left-bottom
-	targets.add(App->physics->CreateRectangleSensor(142, 250, 9, 39, 50));//left-upper
-	targets.add(App->physics->CreateRectangleSensor(318, 242, 9, 39, -50));//right-upper
-	targets.add(App->physics->CreateRectangleSensor(355, 271, 10, 39, -50));//right-bottom
-	//listeners
-
+	targets[0] = App->physics->CreateRectangleSensor(106, 279, 10, 39, 50);//left-bottom
+	targets[0]->listener = this;
+	targets[1] = App->physics->CreateRectangleSensor(142, 250, 9, 39, 50);//left-upper
+	targets[1]->listener = this;
+	targets[2] = App->physics->CreateRectangleSensor(318, 242, 9, 39, -50);//right-upper
+	targets[2]->listener = this;
+	targets[3] = App->physics->CreateRectangleSensor(355, 271, 10, 39, -50);//right-bottom
+	targets[3]->listener = this;
 	//Slingshots============================================
 	int LeftStruct[26] = {
 	80, 727,

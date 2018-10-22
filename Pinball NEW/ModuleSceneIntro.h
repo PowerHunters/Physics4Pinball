@@ -47,7 +47,7 @@ public:
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bumpers;
 	p2List<PhysBody*> slingshots;
-	p2List<PhysBody*> targets;
+	PhysBody* targets[4];
 	PhysBody* final_target = NULL;
 	PhysBody* top_hole = NULL;
 	PhysBody* magnet_hole = NULL;

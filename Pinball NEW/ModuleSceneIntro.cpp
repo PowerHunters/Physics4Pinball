@@ -144,11 +144,15 @@ update_status ModuleSceneIntro::Update()
 	{
 		activate_final_target = true;
 	}
-	// --------Multiplier bonus--------------------------------------------
+	// --------Bonus--------------------------------------------
 	multiplier_bonus[0] = {251, 825};
 	multiplier_bonus[1] = {251, 799 };
 	multiplier_bonus[2] = {251, 773 };
 	multiplier_bonus[3] = {251, 747 };
+
+	magnet_bonus[0] = { 366,561 };
+	magnet_bonus[1] = { 382,536 };
+	magnet_bonus[2] = { 394,511 };
 
 	// All draw functions ======================================================
 

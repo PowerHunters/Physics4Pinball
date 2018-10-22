@@ -33,6 +33,7 @@ public:
 	bool is_dead = false;
 	uint lifes;
 	uint points;
+	uint multiplier;
 
 	// PhysBodies ==================================
 	PhysBody* ball = NULL;

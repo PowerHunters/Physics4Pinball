@@ -46,8 +46,8 @@ bool ModulePlayer::Start()
 		-70 ,-7
 	};
 	
-	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), left_flipper, 8, b2Vec2(147, 920), -30 , 30 , flipper_l_joint);
-	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), right_flipper, 8, b2Vec2(320, 920), -30, 30 , flipper_r_joint);
+	flipper_l = App->physics->CreateFlipper(b2Vec2(177, 920), left_flipper, 8, b2Vec2(147, 920), -30 , 40 , flipper_l_joint);
+	flipper_r = App->physics->CreateFlipper(b2Vec2(290, 920), right_flipper, 8, b2Vec2(320, 920), -40, 30, flipper_r_joint);
  	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 33, 33, launcher_joint);
 
 	if (flipper_r_joint == NULL)
@@ -108,14 +108,13 @@ update_status ModulePlayer::Update()
 	// Flippers =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_l, -9.0f);
+		engageFlipper(flipper_l, -10.0f);
 	}
-	else
-		engageFlipper(flipper_l, 2.0f);
+
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_r, 13.0f);
+		engageFlipper(flipper_r, 10.0f);
 	}
 
 	// Launcher ==============================================================

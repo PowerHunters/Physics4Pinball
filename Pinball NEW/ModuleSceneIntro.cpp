@@ -36,6 +36,16 @@ bool ModuleSceneIntro::Start()
 	{
 		combo_letters[i].actived_rect = {i*width , 0, width, height };
 	}
+	combo_letters[0].position = { 111,606 };
+	combo_letters[1].position = { 163,606 };
+	combo_letters[2].position = { 215,606 };
+	combo_letters[3].position = { 267,606 };
+	combo_letters[4].position = { 319,606 };
+	combo_letters[5].position = { 140,678 };
+	combo_letters[6].position = { 192,678 };
+	combo_letters[7].position = { 244,678 };
+	combo_letters[8].position = { 296,678 };
+	
 
 	// PhyBodies ==============================================
 	AddStaticBodies();

@@ -60,9 +60,9 @@ bool ModuleSceneIntro::Start()
 	// PhyBodies ==============================================
 	AddStaticBodies();
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
-	top_hole = App->physics->CreateCircleIsSensor(237, 167, 17);
+	top_hole = App->physics->CreateCircleIsSensor(237, 168, 8);
 	top_hole->listener = this;
-	magnet_hole = App->physics->CreateCircleIsSensor(438, 281, 17);
+	magnet_hole = App->physics->CreateCircleIsSensor(438, 280, 8);
 	magnet_hole->listener = this;
 	// Barriers ---------------------------------------
 	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
@@ -189,7 +189,21 @@ update_status ModuleSceneIntro::Update()
 			App->player->ball->body->SetTransform(magnet_hole->body->GetPosition(), 0);
 			++keep_inside_frames;
 		}
-			
+	}
+
+	if (keep_player_top)
+	{
+		if (keep_inside_frames == KEEP_INSIDE_FRAMES)
+		{
+			keep_inside_frames = 0;
+			keep_player_top = false;
+		}
+		else
+		{
+			App->player->ball->body->SetLinearVelocity({ 0,0 });
+			App->player->ball->body->SetTransform(top_hole->body->GetPosition(), 0);
+			++keep_inside_frames;
+		}
 	}
 
 	// All draw functions ======================================================
@@ -228,6 +242,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 	else if (magnet_hole == bodyA && App->player->ball == bodyB && left_barrier)
 	{
 		keep_player_magnet = true;
+		return;
+	}
+	else if (top_hole == bodyA && App->player->ball == bodyB && left_barrier)
+	{
+		keep_player_top = true;
 		return;
 	}
 	// Targets ========================================================================

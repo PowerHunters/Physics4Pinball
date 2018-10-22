@@ -56,9 +56,11 @@ public:
 
 	// Bonuses ---------------------------------
 	int keep_inside_frames = 0;
+	bool keep_player_magnet;
+	bool keep_player_top;
 	iPoint pos_multiplier_bonus[4];
 	iPoint pos_magnet_bonus[3];
-	bool keep_player_magnet;
+
 
 	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;

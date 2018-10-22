@@ -17,6 +17,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	void AddPoints(int points);
+
 public:
 
 	int font_1 = 1;
@@ -24,8 +26,9 @@ public:
 	//char PrevScore_text[10];
 	//char HighScore_text[10];
 	char balls_text[10];
-
+	// Player info ===================================
 	uint current_score = 0;
+	uint multiplier = 1;
 	//uint previous_score = 0;
 	//uint high_score = 0;
 };

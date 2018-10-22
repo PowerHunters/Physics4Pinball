@@ -6,6 +6,13 @@
 
 class PhysBody;
 
+struct Combo_letter
+{
+	bool activated = false;
+	SDL_Rect normal_sprite;
+	SDL_Rect actived_sprite;
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -42,12 +49,15 @@ public:
 	p2List<PhysBody*> bumpers;
 	p2List<PhysBody*> bottom_bumpers;
 
-	//Textures====================================
+	//Textures ===================================		
 	SDL_Texture* background_tex;
 	SDL_Texture* circle_tex;
 	SDL_Rect pinball_rect;
 
-	//Sfx=========================================
+	//Fx =========================================
+	Combo_letter combo_letters[9];
+
+	//Sfx ========================================
 
 
 

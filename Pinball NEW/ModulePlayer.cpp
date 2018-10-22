@@ -7,6 +7,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleUI.h"
 
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -168,6 +169,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		normal.y *= 0.2f;
 		ball->body->SetLinearVelocity({ 0.0f ,ball->body->GetLinearVelocity().y * 0.2f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
+		App->ui->current_score += 1000;
 	}
 	//  Bumpers ======================================================
 	else if (ball == bodyA && App->scene_intro->bumpers.find(bodyB) != -1)

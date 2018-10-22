@@ -107,7 +107,7 @@ update_status ModuleSceneIntro::Update()
 	int count = 0;
 	for (uint i = 0; i < 4; ++i)
 	{
-		if (targets[i]->to_delete == true) 
+		if (targets[i] && targets[i]->to_delete == true)
 		{
 			App->physics->DestroyPhysBody(targets[i]); 
 			targets[i] = nullptr;
@@ -163,7 +163,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		if (targets[i] == bodyA && App->player->ball == bodyB && targets[i])
+		if (targets[i] &&  targets[i] == bodyA && App->player->ball == bodyB )
 		{
 			targets[i]->to_delete = true;
 			break;

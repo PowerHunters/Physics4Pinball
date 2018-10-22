@@ -17,6 +17,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	void AddPoints(int points);
+
 public:
 
 	int font_1 = 0;
@@ -26,8 +28,11 @@ public:
 	int font_2 = 1;
 	//char HighScore_text[10];
 
+	// Player info ===================================
 	uint current_score = 0;
+	uint multiplier = 1;
 	uint high_score = 0;
+
 };
 
 #endif //__MODULEUI_H__

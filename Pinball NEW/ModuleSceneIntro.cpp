@@ -7,11 +7,12 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
+#include "ModuleUI.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex =  circle_tex = combo_letters_tex =  NULL;
+	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex=  NULL;
 	pinball_rect.x = 0;
 	pinball_rect.y = 0;
 	pinball_rect.w = 518;
@@ -31,7 +32,8 @@ bool ModuleSceneIntro::Start()
 	// Textures ===============================================
 	background_tex = App->textures->Load("textures/Pinball.png");
 	combo_letters_tex = App->textures->Load("textures/chocolate.png");
-	
+	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
+	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
 	// Fx =====================================================
 	int width = 36, height = 36;
 	for (int i = 0; i < 9; ++i)
@@ -94,9 +96,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (left_barrier == NULL) create_left_barrier = true;
 		if (right_barrier) destroy_right_barrier = true;
-
-
-
 		reset = false;
 	}
 
@@ -219,6 +218,9 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
 
+	//--------Bonus Points-----------------------------------------
+
+
 
 	return UPDATE_CONTINUE;
 }
@@ -249,12 +251,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 	else if (top_hole == bodyA && App->player->ball == bodyB && left_barrier)
 	{
 		keep_player_top = true;
+		// Add points ================================
+		App->ui->AddPoints(5000);
 		return;
 	}
 	// Targets ========================================================================
 	else if (final_target && final_target == bodyA && App->player->ball == bodyB && activate_final_target)
 	{
-	/*	activate_final_target = false;*/
+		// Add points ================================
+		App->ui->AddPoints(10000);
+		// Logic =====================================
 		final_target->to_delete = true;
 		if (combo_letters_amount < 8) 
 		{
@@ -263,8 +269,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 		else 
 		{
 			App->audio->PlayFx(chocolate_combo_sfx);
-			App->player->points += 1000000;
 			combo_letters_amount = 0;
+			// Add points ================================
+			App->ui->AddPoints(1000000);
 		}
 		combo_delay = true;
 	}
@@ -274,6 +281,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 		if (targets[i] &&  targets[i] == bodyA && App->player->ball == bodyB )
 		{
 			targets[i]->to_delete = true;
+			// Add points ================================
+			App->ui->AddPoints(2000);
 			break;
 		}
 	}

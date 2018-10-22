@@ -23,7 +23,6 @@ public:
 	bool reset = false;
 
 	// PhysBodies==================================
-	PhysBody* sensor = NULL;
 	PhysBody* sensor_death = NULL;
 
 	// Barriers ------------------------------
@@ -38,9 +37,14 @@ public:
 	PhysBody* sensor_initial_barrier_left = NULL;
 	PhysBody* sensor_final_barrier_left = NULL;
 
+	// Other sensors, collisions and bumpers
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bumpers;
-	p2List<PhysBody*> bottom_bumpers;
+	p2List<PhysBody*> slingshots;
+	p2List<PhysBody*> targets;
+	PhysBody* final_target = NULL;
+	PhysBody* top_hole = NULL;
+	PhysBody* magnet_hole = NULL;
 
 	//Textures====================================
 	SDL_Texture* background_tex;

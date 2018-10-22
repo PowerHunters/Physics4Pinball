@@ -159,7 +159,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	contact->GetWorldManifold(&worldManifold);
 
 	// Bottom bumpers ======================================================
-	if (ball == bodyA && App->scene_intro->bottom_bumpers.find(bodyB) != -1)
+	if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
 	{
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);

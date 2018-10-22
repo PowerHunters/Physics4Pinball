@@ -8,6 +8,7 @@ class PhysBody;
 
 struct Combo_letter
 {
+	iPoint position;
 	bool activated = false;
 	SDL_Rect actived_rect;
 };
@@ -54,6 +55,7 @@ public:
 
 	//Textures ===================================		
 	SDL_Texture* background_tex;
+	SDL_Texture* combo_letters_tex;
 	SDL_Texture* circle_tex;
 	SDL_Rect pinball_rect;
 

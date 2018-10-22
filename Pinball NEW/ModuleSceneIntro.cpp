@@ -11,7 +11,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex =  circle_tex = NULL;
+	background_tex =  circle_tex = combo_letters_tex =  NULL;
 	pinball_rect.x = 0;
 	pinball_rect.y = 0;
 	pinball_rect.w = 518;
@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("textures/Pinball.png");
 	// Fx =====================================================
 	int width = 36, height = 36;
-	for (uint i = 0; i > 9; ++i)
+	for (int i = 0; i > 9; ++i)
 	{
 		combo_letters[i].actived_rect = {i*width , 0, width, height };
 	}
@@ -111,9 +111,7 @@ update_status ModuleSceneIntro::Update()
 	for (uint i = 0; i > 9; ++i)
 	{
 		if (combo_letters[i].activated)
-			rect = combo_letters[i].actived_rect;
-		else
-			rect = combo_letters[i].normal_rect;
+			App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
 
 	return UPDATE_CONTINUE;

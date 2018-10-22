@@ -4,7 +4,7 @@
 #include "ModuleRender.h"
 #include "ModuleFonts.h"
 
-#include <string.h>
+#include <string>
 
 // Constructor
 ModuleFonts::ModuleFonts(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -46,22 +46,26 @@ int ModuleFonts::Load(const char* texture_path, const char* characters, uint row
 
 	fonts[id].graphic = tex; // graphic: pointer to the texture
 	fonts[id].rows = rows; // rows: rows of characters in the texture
-	fonts[id].len = 0;// len: length of the table
+	fonts[id].len = strlen(characters); // len: length of the table
+	App->textures->GetSize(tex, font1W, font1H);
+	fonts[id].row_chars = SDL_strlen(characters);
+	fonts[id].char_w = font1W / fonts[id].row_chars;
+	fonts[id].char_h = font1H / rows;
+	strcpy_s(fonts[id].table, characters);
 
-					  // table: array of chars to have the list of characters
-	strcpy_s(fonts[id].table, MAX_FONT_CHARS, characters); //
-														   // row_chars: amount of chars per row of the texture
-	fonts[id].len = strlen(characters);
-	fonts[id].row_chars = fonts[id].len / rows;
-	// char_w: width of each character
-	App->textures->GetSize(tex, fonts[id].char_w, fonts[id].char_h);
-	fonts[id].char_w = fonts[id].char_w / fonts[id].row_chars;
-	// char_h: height of each character
-	fonts[id].char_h = fonts[id].char_h / rows;
 	LOG("Successfully loaded BMP font from %s", texture_path);
 
 	return id;
 }
+
+//for (int j = 0; j < rows; j++)
+//{
+//	for (int i = 0; i < fonts[1].row_chars; i++)
+//	{
+
+//		fonts[1].table[i] = characters + sizeof(characters)*i;
+//	}
+//}
 
 void ModuleFonts::UnLoad(int font_id)
 {
@@ -73,7 +77,8 @@ void ModuleFonts::UnLoad(int font_id)
 	}
 }
 
-// Render text using a bitmap font
+
+
 void ModuleFonts::BlitText(int x, int y, int font_id, const char* text) const
 {
 	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts[font_id].graphic == nullptr)
@@ -85,24 +90,32 @@ void ModuleFonts::BlitText(int x, int y, int font_id, const char* text) const
 	const Font* font = &fonts[font_id];
 	SDL_Rect rect;
 	uint len = strlen(text);
-
 	rect.w = font->char_w;
 	rect.h = font->char_h;
 
 	for (uint i = 0; i < len; ++i)
 	{
-		// Finds the character in the table and its position in the texture, then Blit
-		uint j = 0;
-
-		for (; j < fonts[font_id].len; ++j) {
-			if (text[i] == fonts[font_id].table[j])
+		for (uint j = 0; j < font->len; ++j)
+		{
+			if (font->table[j] == text[i])
+			{
+				//We blit the letter
+				rect.x = j * font->char_w;
+				rect.y = 0;
+				App->renderer->Blit(font->graphic, x, y, &rect);
+				//And we go to the next one
 				break;
-
+			}
 		}
-
-		rect.x = j % font->row_chars * rect.w;
-		rect.y = j / font->row_chars * rect.h;
-
-		App->renderer->Blit(font->graphic, x + i * font->char_w, y, &rect, 0.0f, false);
+		x += font->char_w;
 	}
+}
+
+uint ModuleFonts::GetCharWidth(int fontId) const
+{
+	if (fontId < 0 || fontId > MAX_FONTS)
+	{
+		LOG("Accessing invalid font! SDL_Error: %s\n", SDL_GetError());//This is not a SDL error, but hopefully it will crash if we access an invalid font
+	}
+	return fonts[fontId].char_w;
 }

@@ -38,15 +38,15 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 
-	//UI
-	AddModule(fonts);
-	AddModule(ui);
-	
 	// Scenes
 	AddModule(scene_intro);
 	
 	// Player
 	AddModule(player);
+
+	//UI
+	AddModule(fonts);
+	AddModule(ui);
 }
 
 Application::~Application()

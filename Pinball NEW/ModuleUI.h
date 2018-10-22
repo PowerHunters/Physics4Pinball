@@ -19,15 +19,15 @@ public:
 
 public:
 
-	int font_1 = 1;
-	char CurrScore_text[10];
-	//char PrevScore_text[10];
+	int font_1 = 0;
+	//char CurrScore_text[10];
+	//char balls_text[10];
+
+	int font_2 = 1;
 	//char HighScore_text[10];
-	char balls_text[10];
 
 	uint current_score = 0;
-	//uint previous_score = 0;
-	//uint high_score = 0;
+	uint high_score = 0;
 };
 
 #endif //__MODULEUI_H__

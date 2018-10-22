@@ -11,7 +11,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex =  circle_tex = combo_letters_tex =  NULL;
+	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex=  NULL;
 	pinball_rect.x = 0;
 	pinball_rect.y = 0;
 	pinball_rect.w = 518;
@@ -31,7 +31,8 @@ bool ModuleSceneIntro::Start()
 	// Textures ===============================================
 	background_tex = App->textures->Load("textures/Pinball.png");
 	combo_letters_tex = App->textures->Load("textures/chocolate.png");
-	
+	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
+	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
 	// Fx =====================================================
 	int width = 36, height = 36;
 	for (int i = 0; i < 9; ++i)
@@ -94,9 +95,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (left_barrier == NULL) create_left_barrier = true;
 		if (right_barrier) destroy_right_barrier = true;
-
-
-
 		reset = false;
 	}
 
@@ -218,6 +216,8 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
+
+	//--------Bonus Points-----------------------------------------
 
 
 	return UPDATE_CONTINUE;

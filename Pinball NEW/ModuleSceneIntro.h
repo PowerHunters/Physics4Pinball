@@ -59,8 +59,9 @@ public:
 	bool keep_player_magnet;
 	bool keep_player_top;
 	iPoint pos_multiplier_bonus[4];
+	SDL_Rect multiplier_rect;
 	iPoint pos_magnet_bonus[3];
-
+	SDL_Rect bonus_rect;
 
 	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;
@@ -73,6 +74,8 @@ public:
 	// Textures ==================================
 	SDL_Texture* background_tex;
 	SDL_Texture* combo_letters_tex;
+	SDL_Texture* multiplier_tex;
+	SDL_Texture* bonus_tex;
 	SDL_Texture* circle_tex;
 	SDL_Rect pinball_rect;
 

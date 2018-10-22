@@ -50,6 +50,9 @@ public:
 	PhysBody* targets[4];
 	PhysBody* final_target = NULL;
 
+	//multiplayer bonus
+	iPoint multiplier_bonus[4];
+
 	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bumpers;

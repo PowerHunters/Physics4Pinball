@@ -112,8 +112,8 @@ update_status ModuleSceneIntro::Update()
 		destroy_right_barrier = false;
 	}
 	// --------Combo------------------------------------------- 
-	
-	if (create_targets) 
+
+	if (create_targets)
 	{
 		final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
 		final_target->listener = this;
@@ -128,13 +128,13 @@ update_status ModuleSceneIntro::Update()
 
 		create_targets = false;
 	}
-	
+
 	int count = 0;
 	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
 	{
 		if (targets[i] && targets[i]->to_delete == true)
 		{
-			App->physics->DestroyPhysBody(targets[i]); 
+			App->physics->DestroyPhysBody(targets[i]);
 			targets[i] = nullptr;
 		}
 		if (targets[i] == nullptr)
@@ -144,7 +144,12 @@ update_status ModuleSceneIntro::Update()
 	{
 		activate_final_target = true;
 	}
-	
+	// --------Multiplier bonus--------------------------------------------
+	multiplier_bonus[0] = {251, 825};
+	multiplier_bonus[1] = {251, 799 };
+	multiplier_bonus[2] = {251, 773 };
+	multiplier_bonus[3] = {251, 747 };
+
 	// All draw functions ======================================================
 
 	// --------Background---------------------------------------

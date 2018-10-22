@@ -40,8 +40,6 @@ bool ModuleSceneIntro::Start()
 	// PhyBodies ==============================================
 	AddStaticBodies();
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
-	final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
-	final_target->listener = this;
 	top_hole = App->physics->CreateCircleIsSensor(237, 167, 17);
 	top_hole->listener = this;
 	magnet_hole = App->physics->CreateCircleIsSensor(438, 281, 17);
@@ -104,8 +102,25 @@ update_status ModuleSceneIntro::Update()
 		destroy_right_barrier = false;
 	}
 	// --------Combo------------------------------------------- 
+	
+	if (create_targets) 
+	{
+		final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
+		final_target->listener = this;
+		targets[0] = App->physics->CreateRectangleSensor(106, 279, 10, 39, 50);//left-bottom
+		targets[0]->listener = this;
+		targets[1] = App->physics->CreateRectangleSensor(142, 250, 9, 39, 50);//left-upper
+		targets[1]->listener = this;
+		targets[2] = App->physics->CreateRectangleSensor(318, 242, 9, 39, -50);//right-upper
+		targets[2]->listener = this;
+		targets[3] = App->physics->CreateRectangleSensor(355, 271, 10, 39, -50);//right-bottom
+		targets[3]->listener = this;
+
+		create_targets = false;
+	}
+	
 	int count = 0;
-	for (uint i = 0; i < 4; ++i)
+	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
 	{
 		if (targets[i] && targets[i]->to_delete == true)
 		{
@@ -115,10 +130,9 @@ update_status ModuleSceneIntro::Update()
 		if (targets[i] == nullptr)
 			++count;
 	}
-
 	if (count == 4)
 	{
-		
+		activate_final_target = true;
 	}
 	
 	// All draw functions ======================================================
@@ -126,11 +140,9 @@ update_status ModuleSceneIntro::Update()
 	// --------Background---------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
 	// -------Combo letters ----------------------------------------
-	SDL_Rect rect;
-	for (uint i = 0; i < 9; ++i)
+	for (uint i = 0; i < combo_letters_amount; ++i)
 	{
-		if (combo_letters[i].activated)
-			App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
+		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
 
 	return UPDATE_CONTINUE;
@@ -141,27 +153,29 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 	// Sensors ========================================================================
 	if (sensor_barrier_right == bodyA && App->player->ball == bodyB && right_barrier == nullptr)
 	{
-		// Create barrier =================================
 		create_right_barrier = true;
 		return;
 	}
-
 	else if (sensor_final_barrier_left == bodyA && App->player->ball == bodyB && left_barrier == nullptr)
 	{
-		// Create barrier =================================
 		create_left_barrier = true;
 		return;
 	}
-
 	else if (sensor_initial_barrier_left == bodyA && App->player->ball == bodyB && left_barrier != nullptr)
 	{
-		// Destroy barrier =================================
 		destroy_left_barrier = true;
 		return;
 	}
-	// Targets ========================================================================
 
-	for (uint i = 0; i < 4; ++i)
+	// Targets ========================================================================
+	else if (final_target != nullptr && final_target == bodyA && App->player->ball == bodyB && activate_final_target)
+	{
+		activate_final_target = false;
+		final_target->to_delete = true;
+		++combo_letters_amount;
+	}
+
+	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
 	{
 		if (targets[i] &&  targets[i] == bodyA && App->player->ball == bodyB )
 		{
@@ -177,15 +191,7 @@ void ModuleSceneIntro::AddStaticBodies()
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 + 29, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 85, SCREEN_HEIGHT / 2 - 222, 27, false));
 	bumpers.add(App->physics->CreateCircle(SCREEN_WIDTH / 2 - 29, SCREEN_HEIGHT / 2 - 135, 27, false));
-	//Targets============================================
-	targets[0] = App->physics->CreateRectangleSensor(106, 279, 10, 39, 50);//left-bottom
-	targets[0]->listener = this;
-	targets[1] = App->physics->CreateRectangleSensor(142, 250, 9, 39, 50);//left-upper
-	targets[1]->listener = this;
-	targets[2] = App->physics->CreateRectangleSensor(318, 242, 9, 39, -50);//right-upper
-	targets[2]->listener = this;
-	targets[3] = App->physics->CreateRectangleSensor(355, 271, 10, 39, -50);//right-bottom
-	targets[3]->listener = this;
+
 	//Slingshots============================================
 	int LeftStruct[26] = {
 	80, 727,

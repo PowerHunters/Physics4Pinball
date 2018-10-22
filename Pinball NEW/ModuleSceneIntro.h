@@ -9,7 +9,6 @@ class PhysBody;
 struct Combo_letter
 {
 	iPoint position;
-	bool activated = false;
 	SDL_Rect actived_rect;
 };
 
@@ -29,10 +28,9 @@ public:
 
 	bool reset = false;
 
-	// PhysBodies==================================
-	PhysBody* sensor_death = NULL;
+	// PhysBodies========================================
 
-	// Barriers ------------------------------
+	// Barriers ----------------------------------
 	bool create_right_barrier = false;
 	bool create_left_barrier = true;
 	bool destroy_right_barrier = false;
@@ -44,25 +42,29 @@ public:
 	PhysBody* sensor_initial_barrier_left = NULL;
 	PhysBody* sensor_final_barrier_left = NULL;
 
-	// Other sensors, collisions and bumpers
+	// Chocolate combo -------------------------
+	Combo_letter combo_letters[9];
+	uint combo_letters_amount = 0;
+	bool activate_final_target = false;
+	bool create_targets = true;
+	PhysBody* targets[4];
+	PhysBody* final_target = NULL;
+
+	// Other sensors, collisions and bumpers------
 	p2List<PhysBody*> board_parts;
 	p2List<PhysBody*> bumpers;
 	p2List<PhysBody*> slingshots;
-	PhysBody* targets[4];
-	PhysBody* final_target = NULL;
 	PhysBody* top_hole = NULL;
 	PhysBody* magnet_hole = NULL;
+	PhysBody* sensor_death = NULL;
 
-	//Textures ===================================		
+	// Textures ==================================
 	SDL_Texture* background_tex;
 	SDL_Texture* combo_letters_tex;
 	SDL_Texture* circle_tex;
 	SDL_Rect pinball_rect;
 
-	//Fx =========================================
-	Combo_letter combo_letters[9];
-
-	//Sfx ========================================
+	// Sfx ========================================
 
 
 

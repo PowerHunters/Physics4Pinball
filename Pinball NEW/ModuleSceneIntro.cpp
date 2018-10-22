@@ -28,9 +28,16 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	//Textures===============================================
+	// Textures ===============================================
 	background_tex = App->textures->Load("textures/Pinball.png");
-	//PhyBodies==============================================
+	// Fx =====================================================
+	int width = 36, height = 36;
+	for (uint i = 0; i > 9; ++i)
+	{
+		combo_letters[i].actived_rect = {i*width , 0, width, height };
+	}
+
+	// PhyBodies ==============================================
 	AddStaticBodies();
 	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
 	final_target = App->physics->CreateRectangleSensor(59, 533, 10, 39, 45);
@@ -46,7 +53,7 @@ bool ModuleSceneIntro::Start()
 	sensor_initial_barrier_left->listener = this;
 	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 6, 90);
 	sensor_final_barrier_left->listener = this;
-	//Delete-------------------------------------------
+	// Delete-------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 
 	return ret;
@@ -97,8 +104,17 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// All draw functions ======================================================
-	//------Background--------------------------------------------
+	// Background--------------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
+	// Combo letters ----------------------------------------
+	SDL_Rect rect;
+	for (uint i = 0; i > 9; ++i)
+	{
+		if (combo_letters[i].activated)
+			rect = combo_letters[i].actived_rect;
+		else
+			rect = combo_letters[i].normal_rect;
+	}
 
 	return UPDATE_CONTINUE;
 }

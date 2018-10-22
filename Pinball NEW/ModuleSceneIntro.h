@@ -9,8 +9,7 @@ class PhysBody;
 struct Combo_letter
 {
 	bool activated = false;
-	SDL_Rect normal_sprite;
-	SDL_Rect actived_sprite;
+	SDL_Rect actived_rect;
 };
 
 class ModuleSceneIntro : public Module

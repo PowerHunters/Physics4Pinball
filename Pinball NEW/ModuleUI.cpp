@@ -76,10 +76,10 @@ update_status ModuleUI::Update()
 	//	App->fonts->BlitText(436, 22, font_1, balls_text);
 
 
-	//Add balls
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene_intro->IsEnabled() == true) {
-		App->player->lifes++;
-	}
+	////Add balls
+	//if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene_intro->IsEnabled() == true) {
+	//	App->player->lifes++;
+	//}
 
 	return UPDATE_CONTINUE;
 }

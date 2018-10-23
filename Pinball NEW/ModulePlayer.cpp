@@ -14,7 +14,7 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = flipper_tex = NULL;
-	lifes = 5;
+	lifes = 2;
 	init_position.x = PIXEL_TO_METERS(489);
 	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
@@ -84,11 +84,26 @@ update_status ModulePlayer::Update()
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 
-	if (reset)
+	if (reset_pos)
 	{
 		Reset();
-		reset = false;
+		reset_pos = false;
 	}
+
+	if (reset_all)
+	{
+		Reset();
+		lifes = 5;
+		App->ui->current_score = 0;
+		App->ui->multiplier = 1;
+		reset_all = false;
+	}
+	// Game ============================================================
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->player->is_dead == true)
+	{
+		is_dead = false;
+	}
+
 
 	// Ball =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
@@ -116,7 +131,7 @@ update_status ModulePlayer::Update()
 	}
 
 	// Launcher ==============================================================
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) 
 	{
 		launcher_joint->SetMotorSpeed(-2);
 		impulse_force += 1.2f;
@@ -126,7 +141,7 @@ update_status ModulePlayer::Update()
 			impulse_force = 60;
 		}
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) 
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) 
 	{
 		launcher_joint->SetMotorSpeed(impulse_force);
 		impulse_force = 0; //Sfx
@@ -214,17 +229,18 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	// Death sensor ======================================================
 	else if (ball == bodyA && App->scene_intro->sensor_death == bodyB)
 	{
-		// Sfx =======================================
-		App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
 		// Lifes logic ===============================
 		--lifes;
 		if (lifes <= 0) {
+			lifes = 0;
 			is_dead = true;
 		}
 		else
-			// Set ball ==================================
+		// Set ball ==================================
 		{
-			reset = true;
+			// Sfx =======================================
+			App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
+			reset_pos = true;
 		}
 	}
 }

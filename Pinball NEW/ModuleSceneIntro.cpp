@@ -122,11 +122,36 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	// Logic ==================================================================
-	if (reset == true)
+	if (reset)
 	{
+		// Bodies ---------------------------------
 		if (left_barrier == NULL) create_left_barrier = true;
 		if (right_barrier) destroy_right_barrier = true;
+
+		// Bonuses --------------------------------
+		keep_inside_frames = 0;
+		keep_player_magnet;
+		keep_player_top;
+
 		reset = false;
+	}
+	if (reset_combo)
+	{
+		// Targets --------------------------------
+		for (uint i = 0; i < 4; ++i) {
+			if (targets[i]) {
+				App->physics->DestroyPhysBody(targets[i]);
+			}
+		}
+		combo_delay_frames = 0;
+		create_targets = true;
+		combo_delay = false;
+		activate_final_target = false;
+		// Combo ----------------------------------
+		combo_delay_frames = 0;
+		combo_letters_amount = 0;
+
+		reset_combo = false;
 	}
 	//--------Barriers----------------------------------------------
 	if (destroy_left_barrier == true)

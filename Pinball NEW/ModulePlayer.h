@@ -30,9 +30,10 @@ public:
 public:
 	// State =======================================
 	b2Vec2 init_position;
-	bool reset = false;
+	bool reset_pos = false;
+	bool reset_all = false;
 	bool is_dead = false;
-	uint lifes;
+	int lifes;
 	uint points;
 	uint multiplier;
 

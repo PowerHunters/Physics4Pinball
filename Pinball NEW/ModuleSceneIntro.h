@@ -47,7 +47,7 @@ public:
 public:
 
 	bool reset = false;
-
+	bool reset_combo = false;
 	// PhysBodies========================================
 
 	// Barriers ----------------------------------

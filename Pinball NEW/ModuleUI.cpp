@@ -86,4 +86,5 @@ update_status ModuleUI::PostUpdate()
 void ModuleUI::AddPoints(int points)
 {
 	current_score += points * multiplier;
+	LOG("%i", current_score);
 }

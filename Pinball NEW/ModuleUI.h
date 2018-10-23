@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "p2Point.h"
 
+#define MAX_SCORE 999999999
+#define MAX_DIGITS 9
+
 class ModuleUI : public Module
 {
 
@@ -14,22 +17,23 @@ public:
 
 
 	bool Start();
-	update_status PostUpdate();
+	update_status Update();
 	bool CleanUp();
 
 	void AddPoints(int points);
 
 public:
 
-	int font_1 = 0;
-	//char CurrScore_text[10];
-	//char balls_text[10];
+	SDL_Texture * font_1;
+	SDL_Texture* font_2;
 
-	int font_2 = 1;
-	//char HighScore_text[10];
+	SDL_Rect number_rects[10];
+
+	int digit_score[MAX_DIGITS] = { -1,-1,-1,-1,-1,-1,-1,-1,0 };
+	//int digit_lives[1] = { App->player->lives };
 
 	// Player info ===================================
-	int current_score = 0;
+	int score = 0;
 	int multiplier = 1;
 	int high_score = 0;
 

@@ -6,12 +6,22 @@
 
 #define COMBO_DELAY_FRAMES 200
 #define KEEP_INSIDE_FRAMES 60
+#define LIGHT_FRAMES 20
+
 class PhysBody;
 
 struct Combo_letter
 {
 	iPoint position;
 	SDL_Rect actived_rect;
+};
+
+struct Light_Animation
+{
+	iPoint position;
+	SDL_Rect rect;
+	SDL_Texture*  tex = nullptr;
+	uint frames = 0;
 };
 
 enum class Bonuses : int
@@ -80,12 +90,16 @@ public:
 	PhysBody* sensor_death = NULL;
 
 	// Textures ==================================
+	Light_Animation animations[5];
 	SDL_Texture* background_tex;
 	SDL_Texture* combo_letters_tex;
 	SDL_Texture* multiplier_tex;
 	SDL_Texture* bonus_tex;
 	SDL_Texture* circle_tex;
 	SDL_Texture* target_tex;
+	SDL_Texture* bumper_tex;
+	SDL_Texture* slingshots_tex;
+
 	SDL_Rect pinball_rect;
 	SDL_Rect target_rect;
 	// Sfx ========================================

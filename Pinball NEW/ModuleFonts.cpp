@@ -51,8 +51,8 @@ int ModuleFonts::Load(const char* texture_path, const char* characters, uint row
 	fonts[id].len = strlen(characters); // len: length of the table
 	App->textures->GetSize(tex, font1W, font1H);
 	fonts[id].row_chars = SDL_strlen(characters);
-	fonts[id].char_w = font1W / fonts[id].row_chars;
-	fonts[id].char_h = font1H / rows;
+	fonts[id].char_w = 15;
+	fonts[id].char_h = 18;
 	strcpy_s(fonts[id].table, characters);
 
 	LOG("Successfully loaded BMP font from %s", texture_path);

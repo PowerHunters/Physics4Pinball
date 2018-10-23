@@ -167,6 +167,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	// Slingshots ======================================================
 	if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
 	{
+		bodyB->activated = true;
 		// Change bonus ==================================
 		App->scene_intro->current_bonus = (Bonuses)((int)App->scene_intro->current_bonus + 1);
 		if (App->scene_intro->current_bonus == Bonuses::max) {
@@ -186,6 +187,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	//  Bumpers ======================================================
 	else if (ball == bodyA && App->scene_intro->bumpers.find(bodyB) != -1)
 	{
+		bodyB->activated = true;
 		// Add points ================================
 		App->ui->AddPoints(500);
 		// Sfx =======================================

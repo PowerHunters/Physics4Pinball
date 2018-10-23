@@ -20,13 +20,13 @@ public:
 	void AddPoints(int points);
 
 public:
+	//GameOver =======================================
+	SDL_Texture* gameover_tex;
+	SDL_Rect gameover_rect;
 
+	//Fonts ==========================================
 	int font_1 = 0;
-	//char CurrScore_text[10];
-	//char balls_text[10];
-
 	int font_2 = 1;
-	//char HighScore_text[10];
 
 	// Player info ===================================
 	int current_score = 0;

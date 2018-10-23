@@ -14,7 +14,7 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_tex = flipper_tex = NULL;
-	lifes = 2;
+	lifes = 5;
 	init_position.x = PIXEL_TO_METERS(489);
 	init_position.y = PIXEL_TO_METERS(900);
 	impulse_force = 0.0f;
@@ -101,6 +101,9 @@ update_status ModulePlayer::Update()
 	// Game ============================================================
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->player->is_dead == true)
 	{
+		reset_all = true;
+		App->scene_intro->reset = true;
+		App->scene_intro->reset_combo = true;
 		is_dead = false;
 	}
 

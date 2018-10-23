@@ -9,6 +9,7 @@
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleFonts.h"
+#include "ModuleFonts1.h"
 #include "ModuleUI.h"
 
 #include "Application.h"
@@ -24,7 +25,9 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
 	fonts = new ModuleFonts(this);
+	fonts1 = new ModuleFonts1(this);
 	ui = new ModuleUI(this);
+
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -46,7 +49,9 @@ Application::Application()
 
 	//UI
 	AddModule(fonts);
+	AddModule(fonts1);
 	AddModule(ui);
+
 }
 
 Application::~Application()

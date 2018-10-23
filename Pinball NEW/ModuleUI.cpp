@@ -6,6 +6,7 @@
 #include "ModuleRender.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleFonts.h"
+#include "ModuleFonts1.h"
 #include "ModuleUI.h"
 #include "ModulePlayer.h"
 #include <stdio.h>
@@ -54,25 +55,23 @@ update_status ModuleUI::PostUpdate()
 	str_HighScore = HighScore.c_str();
 	App->fonts->BlitText(224, 21, font_2, str_HighScore);
 
-	
 	string lifes = to_string(App->player->lifes);
 	char const* str_lifes = lifes.c_str();;
 	App->fonts->BlitText(436, 21, font_1, str_lifes);
 
-	////scores
-	//
-	//	//score1
-	//	sprintf_s(CurrScore_text, 10, "%i", current_score);
-	//	App->fonts->BlitText(20, 21, font_1, CurrScore_text);
+	//scores
 
-	//	//highscore print
-	//	sprintf_s(HighScore_text, 10, "%i", high_score);
-	//	App->fonts->BlitText(125, 224, font_2, HighScore_text);
+	//score1
+	sprintf_s(CurrScore_text, 10, "%i", current_score);
+	App->fonts->BlitText(20, 21, font_1, CurrScore_text);
 
-	////balls
+	//highscore print
+	sprintf_s(HighScore_text, 10, "%i", high_score);
+	App->fonts->BlitText(225, 224, font_2, HighScore_text);
 
-	//	sprintf_s(balls_text, 10, "%i", App->player->lifes);
-	//	App->fonts->BlitText(436, 22, font_1, balls_text);
+	//balls
+	sprintf_s(balls_text, 10, "%i", App->player->lifes);
+	App->fonts->BlitText(436, 22, font_1, balls_text);
 
 
 	//Add balls

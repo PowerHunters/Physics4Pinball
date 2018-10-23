@@ -50,18 +50,13 @@ bool ModulePlayer::Start()
 		-70 ,-7
 	};
 	
+	ball = App->physics->CreateCircle(489, 900, 11);
+	ball->body->SetBullet(true);
+	ball->listener = this;
+
 	flipper_l = App->physics->CreateFlipper(b2Vec2(175, 918), left_flipper, 8, b2Vec2(143, 918), -30 , 40 , flipper_l_joint);
 	flipper_r = App->physics->CreateFlipper(b2Vec2(293, 918), right_flipper, 8, b2Vec2(325, 918), -40, 30, flipper_r_joint);
  	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 33, 33, launcher_joint);
-
-	if (flipper_r_joint == NULL)
-		LOG("flipper_r_joint null ======================================");
-
-	if (flipper_l_joint == NULL)
-		LOG("flipper_l_joint null ======================================");
-
-	if (launcher_joint == NULL)
-		LOG("launcher_joint ======================================");
 
 	return true;
 }
@@ -109,11 +104,9 @@ update_status ModulePlayer::Update()
 
 
 	// Ball =============================================================
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && ball == NULL)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN )
 	{
-		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11);
-		ball->body->SetBullet(true);
-		ball->listener = this;
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY())), 0);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && ball)

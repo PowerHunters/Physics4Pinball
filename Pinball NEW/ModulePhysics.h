@@ -30,6 +30,7 @@ public:
 	b2Body* body;
 	Module* listener;
 	bool to_delete = false;
+	bool activated = false;
 	SDL_Texture* texture;
 };
 

@@ -12,7 +12,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex= target_tex= NULL;
+	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex= target_tex= slingshots_tex= bumper_tex = NULL;
 	
 	// Fx =====================================================
 	int width = 36, height = 36;
@@ -67,13 +67,31 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("textures/Pinball.png");
 	combo_letters_tex = App->textures->Load("textures/chocolate.png");
 	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
-	target_tex = App->textures->Load("textures/target.png");
-	points_rect = {0,0,19,19};
 	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
+	bumper_tex = App->textures->Load("textures/bumper.png");
+	slingshots_tex = App->textures->Load("textures/slingshot.png");
+	target_tex = App->textures->Load("textures/target.png");
+	points_rect = { 0,0,19,19 };
+	
+	// Animation ==============================================
+	// Bumpers --------------------------------
+	for (uint i = 0; i < 3; ++i)
+	{
+		animations[i].rect = {0, 0 ,55,55};
+		animations[i].tex = bumper_tex;
+	}
+	animations[0].position = { 259, 290 };
+	animations[1].position = {147, 290};
+	animations[2].position = {201, 376};
+	// Slingshots --------------------------------
+	animations[3].position = { 78, 716};
+	animations[4].position = { 320,716 };
+	animations[3].rect = animations[4].rect = {0, 0, 66, 142};
+	animations[3].tex = animations[4].tex = slingshots_tex;
 
 	// PhyBodies ==============================================
 	AddStaticBodies();
-	sensor_death = App->physics->CreateRectangleSensor(205+56/2, 1046+6/2, 56, 6, 0); //the x and y take pos from the center
+	sensor_death = App->physics->CreateRectangleSensor(205 + 56 / 2, 1046 + 6 / 2, 56, 6, 0); //the x and y take pos from the center
 	top_hole = App->physics->CreateCircleIsSensor(237, 168, 8);
 	top_hole->listener = this;
 	magnet_hole = App->physics->CreateCircleIsSensor(438, 280, 8);
@@ -110,7 +128,6 @@ update_status ModuleSceneIntro::Update()
 		if (right_barrier) destroy_right_barrier = true;
 		reset = false;
 	}
-
 	//--------Barriers----------------------------------------------
 	if (destroy_left_barrier == true)
 	{
@@ -134,9 +151,7 @@ update_status ModuleSceneIntro::Update()
 		left_barrier = App->physics->CreateRectangle(101, 159, 33, 6, 57, false);
 		create_left_barrier = false;
 	}
-
 	// --------Combo------------------------------------------- 
-
 	if (combo_delay)
 	{
 		if (combo_delay_frames == COMBO_DELAY_FRAMES) {
@@ -224,13 +239,11 @@ update_status ModuleSceneIntro::Update()
 	// --------Background---------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
 	// -------Combo letters ------------------------------------
-
 	for (uint i = 0; i < combo_letters_amount; ++i)
 	{
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
 	// ------- Targets -----------------------------------------
-
 	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
 	{
 		if (targets[i])
@@ -246,7 +259,39 @@ update_status ModuleSceneIntro::Update()
 		final_target->GetPosition(x, y);
 		App->renderer->Blit(target_tex, x - 7, y + 36, &target_rect, 1.0f, targets_angles[4]);
 	}
-	
+	// -------Animations----------------------------------------
+	for (uint i = 0; i < 3; ++i)
+	{
+		PhysBody *data = nullptr;
+		bumpers.at(i, data);
+
+		if (animations[i].frames == LIGHT_FRAMES || data->activated == false)
+		{
+			animations[i].frames = 0;
+			data->activated = false;
+			continue;
+		}
+		++animations[i].frames;
+		App->renderer->Blit(animations[i].tex, animations[i].position.x , animations[i].position.y, &animations[i].rect);
+	}
+
+	for (uint i = 3; i < 5; ++i)
+	{
+		PhysBody *data = nullptr;
+		slingshots.at(i - 3, data);
+
+		if (animations[i].frames == LIGHT_FRAMES || data->activated == false)
+		{
+			animations[i].frames = 0;
+			data->activated = false;
+			continue;
+		}
+		++animations[i].frames;
+		if (i == 3)
+			App->renderer->Blit(animations[i].tex, animations[i].position.x, animations[i].position.y, &animations[i].rect);
+		else
+			App->renderer->Blit(animations[i].tex, animations[i].position.x, animations[i].position.y, &animations[i].rect, 1.0f, 0,0,0,true);
+	}
 	//--------Bonus Points--------------------------------------
 	App->renderer->Blit(multiplier_tex, pos_multiplier_bonus[ App->ui->multiplier -1].x, pos_multiplier_bonus[App->ui->multiplier - 1].y, &points_rect);
 	App->renderer->Blit(bonus_tex, pos_magnet_bonus[(int)current_bonus].x, pos_magnet_bonus[(int)current_bonus].y, &points_rect);

@@ -67,6 +67,7 @@ update_status ModuleUI::Update()
 	char const* str_lifes = lifes.c_str();;
 	App->fonts->BlitText(436, 21, font_1, str_lifes);
 
+
 	//Gameover
 	if (App->player->is_dead == true) {
 		App->renderer->Blit(gameover_tex, SCREEN_WIDTH / 2 - gameover_rect.w / 2 - 11, SCREEN_HEIGHT / 2 - gameover_rect.h / 2, &gameover_rect, 0.0f);

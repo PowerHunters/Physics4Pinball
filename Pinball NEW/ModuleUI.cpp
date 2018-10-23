@@ -1,12 +1,16 @@
-#include "Application.h"
+#include <string>
 #include "Globals.h"
-#include "ModuleRender.h"
+#include "Application.h"
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
+#include "ModuleRender.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleFonts.h"
 #include "ModuleUI.h"
 #include "ModulePlayer.h"
+#include <stdio.h>
 
+using namespace std;
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
@@ -16,22 +20,10 @@ bool ModuleUI::Start()
 {
 	LOG("Loading UI");
 
-	font_1 = App->textures->Load("textures/font_1.png");
-	font_2 = App->textures->Load("textures/font_2.png");
+	font_1 = App->fonts->Load("textures/font_1.png", "0123456789", 1);
+	font_2 = App->fonts->Load("textures/font_2.png", "0123456789", 1);
 
-	number_rects[0] = { 0,0,15,18 };
-	number_rects[1] = { 15,0,15,18 };
-	number_rects[2] = { 30,0,15,18 };
-	number_rects[3] = { 45,0,15,18 };
-	number_rects[4] = { 60,0,15,18 };
-	number_rects[5] = { 75,0,15,18 };
-	number_rects[6] = { 90,0,15,18 };
-	number_rects[7] = { 105,0,15,18 };
-	number_rects[8] = { 120,0,15,18 };
-	number_rects[9] = { 135,0,15,18 };
-
-
-	/*score = 0;*/
+	current_score = 0;
 
 	return true;
 }
@@ -40,51 +32,58 @@ bool ModuleUI::CleanUp()
 {
 	LOG("Unloading user interface")
 
-	//App->textures->Unload(font_1);
-	//App->textures->Unload(font_2);
+	App->fonts->UnLoad(font_1);
+	App->fonts->UnLoad(font_2);
 
 	return true;
 }
 update_status ModuleUI::PostUpdate()
 {
 	//highscore logic
-	if (score > high_score) {
-		high_score = score;
+	if (current_score > high_score) {
+		high_score = current_score; //App->player1->score
 	}
 
-	// blit score
-	int x = 120;
-	int y = 0;
-	for (int i = 8; i > 0; i--)
-	{
-		if (digit_score[i] != -1)
-		{
-			App->renderer->Blit(font_1, x, y, &number_rects[digit_score[i]]);
-			x -= 0;
-		}
-		else break;
+	char const* str_score = nullptr;
+	string score = to_string(current_score);
+	str_score = score.c_str();
+	App->fonts->BlitText(20, 21, font_1, str_score);
+
+	char const* str_HighScore = nullptr;
+	string HighScore = to_string(high_score);
+	str_HighScore = HighScore.c_str();
+	App->fonts->BlitText(224, 21, font_2, str_HighScore);
+
+	
+	string lifes = to_string(App->player->lifes);
+	char const* str_lifes = lifes.c_str();;
+	App->fonts->BlitText(436, 21, font_1, str_lifes);
+
+	////scores
+	//
+	//	//score1
+	//	sprintf_s(CurrScore_text, 10, "%i", current_score);
+	//	App->fonts->BlitText(20, 21, font_1, CurrScore_text);
+
+	//	//highscore print
+	//	sprintf_s(HighScore_text, 10, "%i", high_score);
+	//	App->fonts->BlitText(125, 224, font_2, HighScore_text);
+
+	////balls
+
+	//	sprintf_s(balls_text, 10, "%i", App->player->lifes);
+	//	App->fonts->BlitText(436, 22, font_1, balls_text);
+
+
+	//Add balls
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene_intro->IsEnabled() == true) {
+		App->player->lifes++;
 	}
-
-
-	////Add balls
-	//if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene_intro->IsEnabled() == true) {
-	//	App->player->lifes++;
-	//}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleUI::AddPoints(int points)
 {
-	score += points * multiplier;
-	if (score > MAX_SCORE) score = MAX_SCORE;
-	int index = 8;
-	int aux_score = score;
-	while (aux_score > 0)
-	{
-		int digit = aux_score % 10;
-		aux_score /= 10;
-		digit_score[index] = digit;
-		index--;
-	}
+	current_score += points * multiplier;
 }

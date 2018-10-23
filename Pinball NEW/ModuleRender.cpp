@@ -94,7 +94,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, f
 {
 	bool ret = true;
 	SDL_Rect rect;
-	rect.x = (int) (camera.x * speed) + x * SCREEN_SIZE;
+	rect.x = (int) (camera.x * speed) + x * SCREEN_SIZE ;
 	rect.y = (int) (camera.y * speed) + y * SCREEN_SIZE;
 
 	if(section != NULL)
@@ -124,6 +124,12 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, f
 		flip = SDL_FLIP_HORIZONTAL;
 	else
 		flip = SDL_FLIP_NONE;
+
+	if (MINIMIZE)
+	{
+		SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH*1.1f, SCREEN_HEIGHT*1.1f);
+		SDL_SetWindowPosition(App->window->window, 0, 80);
+	}
 
 	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{

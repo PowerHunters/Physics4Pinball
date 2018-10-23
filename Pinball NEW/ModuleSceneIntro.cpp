@@ -12,34 +12,13 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//Textures===================================
-	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex=  NULL;
-	pinball_rect.x = 0;
-	pinball_rect.y = 0;
-	pinball_rect.w = 518;
-	pinball_rect.h = 1080;
-}
-
-ModuleSceneIntro::~ModuleSceneIntro()
-{}
-
-// Load assets
-bool ModuleSceneIntro::Start()
-{
-	LOG("Loading Intro assets");
-	bool ret = true;
-
-	App->renderer->camera.x = App->renderer->camera.y = 0;
-	// Textures ===============================================
-	background_tex = App->textures->Load("textures/Pinball.png");
-	combo_letters_tex = App->textures->Load("textures/chocolate.png");
-	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
-	points_rect = {0,0,19,19};
-	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
+	background_tex =  circle_tex = combo_letters_tex = multiplier_tex = bonus_tex= target_tex= NULL;
+	
 	// Fx =====================================================
 	int width = 36, height = 36;
 	for (int i = 0; i < 9; ++i)
 	{
-		combo_letters[i].actived_rect = {i*width , 0, width, height };
+		combo_letters[i].actived_rect = { i*width , 0, width, height };
 	}
 	combo_letters[0].position = { 111,606 };
 	combo_letters[1].position = { 163,606 };
@@ -59,6 +38,38 @@ bool ModuleSceneIntro::Start()
 	pos_magnet_bonus[0] = { 366,561 };
 	pos_magnet_bonus[1] = { 382,536 };
 	pos_magnet_bonus[2] = { 394,511 };
+	
+	pinball_rect.x = 0;
+	pinball_rect.y = 0;
+	pinball_rect.w = 518;
+	pinball_rect.h = 1080;
+
+	target_rect = { 0, 0, 38,7 };
+	targets_angles[0] = 140;
+	targets_angles[1] = -40;
+	targets_angles[2] = 40;
+	targets_angles[3] = 40;
+	targets_angles[4] = -45;
+
+}
+
+ModuleSceneIntro::~ModuleSceneIntro()
+{}
+
+// Load assets
+bool ModuleSceneIntro::Start()
+{
+	LOG("Loading Intro assets");
+	bool ret = true;
+
+	App->renderer->camera.x = App->renderer->camera.y = 0;
+	// Textures ===============================================
+	background_tex = App->textures->Load("textures/Pinball.png");
+	combo_letters_tex = App->textures->Load("textures/chocolate.png");
+	multiplier_tex = App->textures->Load("textures/multiplayer_bonus.png");
+	target_tex = App->textures->Load("textures/target.png");
+	points_rect = {0,0,19,19};
+	bonus_tex = App->textures->Load("textures/magnet_bonus.png");
 
 	// PhyBodies ==============================================
 	AddStaticBodies();
@@ -212,16 +223,34 @@ update_status ModuleSceneIntro::Update()
 
 	// --------Background---------------------------------------
 	App->renderer->Blit(background_tex, SCREEN_WIDTH / 2 - pinball_rect.w / 2, 0, &pinball_rect);
-	// -------Combo letters ----------------------------------------
+	// -------Combo letters ------------------------------------
 
 	for (uint i = 0; i < combo_letters_amount; ++i)
 	{
 		App->renderer->Blit(combo_letters_tex, combo_letters[i].position.x, combo_letters[i].position.y, &combo_letters[i].actived_rect);
 	}
-	//--------Bonus Points-----------------------------------------
+	// ------- Targets -----------------------------------------
 
+	for (uint i = 0; (i < 4) && (activate_final_target == false); ++i)
+	{
+		if (targets[i])
+		{
+			int x, y;
+			targets[i]->GetPosition(x, y);
+			App->renderer->Blit(target_tex, x - 7, y + 36, &target_rect, 1.0f, targets_angles[i]);
+		}
+	}
+	if (final_target) 
+	{
+		int x, y;
+		final_target->GetPosition(x, y);
+		App->renderer->Blit(target_tex, x - 7, y + 36, &target_rect, 1.0f, targets_angles[4]);
+	}
+	
+	//--------Bonus Points--------------------------------------
 	App->renderer->Blit(multiplier_tex, pos_multiplier_bonus[ App->ui->multiplier -1].x, pos_multiplier_bonus[App->ui->multiplier - 1].y, &points_rect);
 	App->renderer->Blit(bonus_tex, pos_magnet_bonus[(int)current_bonus].x, pos_magnet_bonus[(int)current_bonus].y, &points_rect);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -245,6 +274,27 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 	}
 	else if (magnet_hole == bodyA && App->player->ball == bodyB && left_barrier)
 	{
+		// Bonuses ==================================
+		switch ((Bonuses)current_bonus) {
+		case Bonuses::extra_ball:
+			++App->player->lifes;
+			if (App->player->lifes > 9)
+			{
+				App->player->lifes = 9;
+			}
+			break;
+		case Bonuses::add_50k:
+			App->ui->AddPoints(50000);
+			break;
+		case Bonuses::advance_multiplier:
+			++App->ui->multiplier;
+			if (App->ui->multiplier == 5)
+			{
+				App->ui->multiplier = 1;
+			}
+			break;
+		}
+
 		keep_player_magnet = true;
 		return;
 	}

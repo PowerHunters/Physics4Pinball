@@ -3,6 +3,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "SDL/include/SDL.h"
 
 class PhysBody;
 class b2RevoluteJoint;
@@ -54,6 +55,8 @@ public:
 
 	// Textures ====================================
 	SDL_Texture* ball_tex;
+	SDL_Texture* flipper_tex;
+	SDL_Rect flipper_rect;
 
 	// Sfx==========================================
 	//uint flipper_fx;

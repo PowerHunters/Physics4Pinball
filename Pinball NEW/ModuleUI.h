@@ -29,9 +29,9 @@ public:
 	//char HighScore_text[10];
 
 	// Player info ===================================
-	uint current_score = 0;
-	uint multiplier = 1;
-	uint high_score = 0;
+	int current_score = 0;
+	int multiplier = 1;
+	int high_score = 0;
 
 };
 

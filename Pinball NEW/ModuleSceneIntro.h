@@ -18,7 +18,8 @@ enum class Bonuses : int
 {
 	extra_ball = 0,
 	add_50k = 1,
-	advance_multiplier = 2
+	advance_multiplier = 2,
+	max = 3
 };
 
 class ModuleSceneIntro : public Module
@@ -60,7 +61,7 @@ public:
 	bool create_targets = true;
 	PhysBody* targets[4];
 	PhysBody* final_target = NULL;
-
+	double targets_angles[5];
 	// Bonuses ---------------------------------
 	int keep_inside_frames = 0;
 	bool keep_player_magnet;
@@ -84,11 +85,12 @@ public:
 	SDL_Texture* multiplier_tex;
 	SDL_Texture* bonus_tex;
 	SDL_Texture* circle_tex;
+	SDL_Texture* target_tex;
 	SDL_Rect pinball_rect;
-
+	SDL_Rect target_rect;
 	// Sfx ========================================
 	uint chocolate_combo_sfx;
-
+	 
 
 	//Delete------------------------
 	uint bonus_fx;

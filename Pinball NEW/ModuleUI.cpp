@@ -44,23 +44,20 @@ update_status ModuleUI::PostUpdate()
 		high_score = current_score; //App->player1->score
 	}
 
-	if (App->scene_intro->IsEnabled() == true) {
-		char const* str_score = nullptr;
-		string score = to_string(current_score);
-		str_score = score.c_str();
-		App->fonts->BlitText(20, 21, font_1, str_score);
+	char const* str_score = nullptr;
+	string score = to_string(current_score);
+	str_score = score.c_str();
+	App->fonts->BlitText(20, 21, font_1, str_score);
 
-		char const* str_HighScore = nullptr;
-		string HighScore = to_string(high_score);
-		str_HighScore = HighScore.c_str();
-		App->fonts->BlitText(224, 21, font_2, str_HighScore);
+	char const* str_HighScore = nullptr;
+	string HighScore = to_string(high_score);
+	str_HighScore = HighScore.c_str();
+	App->fonts->BlitText(224, 21, font_2, str_HighScore);
 
-		char const* str_lifes = nullptr;
-		string lifes = to_string(App->player->lifes);
-		str_lifes = lifes.c_str();
-		App->fonts->BlitText(436, 21, font_2, str_lifes);
-
-	}
+	
+	string lifes = to_string(App->player->lifes);
+	char const* str_lifes = lifes.c_str();;
+	App->fonts->BlitText(436, 21, font_1, str_lifes);
 
 	////scores
 	//
@@ -76,7 +73,7 @@ update_status ModuleUI::PostUpdate()
 
 	//	sprintf_s(balls_text, 10, "%i", App->player->lifes);
 	//	App->fonts->BlitText(436, 22, font_1, balls_text);
-	
+
 
 	//Add balls
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene_intro->IsEnabled() == true) {

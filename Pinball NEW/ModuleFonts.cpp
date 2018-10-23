@@ -43,6 +43,8 @@ int ModuleFonts::Load(const char* texture_path, const char* characters, uint row
 		LOG("Cannot load font %s. Array is full (max %d).", texture_path, MAX_FONTS);
 		return id;
 	}
+	uint font1W;
+	uint font1H;
 
 	fonts[id].graphic = tex; // graphic: pointer to the texture
 	fonts[id].rows = rows; // rows: rows of characters in the texture
@@ -111,7 +113,7 @@ void ModuleFonts::BlitText(int x, int y, int font_id, const char* text) const
 	}
 }
 
-uint ModuleFonts::GetCharWidth(int fontId) const
+uint ModuleFonts::Get_CharWidth(int fontId) const
 {
 	if (fontId < 0 || fontId > MAX_FONTS)
 	{

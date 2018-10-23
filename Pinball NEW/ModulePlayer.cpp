@@ -10,9 +10,10 @@
 #include "ModuleUI.h"
 
 
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	ball_tex = NULL;
+	ball_tex = flipper_tex = NULL;
 	lifes = 5;
 	init_position.x = PIXEL_TO_METERS(489);
 	init_position.y = PIXEL_TO_METERS(900);
@@ -30,6 +31,8 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	// Textures ======================================================
 	ball_tex = App->textures->Load("textures/ball.png");
+	flipper_tex = App->textures->Load("textures/flippers.png");
+	flipper_rect = { 0,0,81,27 };
 	// PhysBodies ====================================================
 	int left_flipper[8]
 	{
@@ -60,12 +63,6 @@ bool ModulePlayer::Start()
 	if (launcher_joint == NULL)
 		LOG("launcher_joint ======================================");
 
-
-	/*starter_tex = App->textures->Load("textures/ball.png");*/
-	//flipper_fx = App->audio->LoadFx("sounds/fx/flipper_sound.ogg");
-	//lose_fx = App->audio->LoadFx("sounds/fx/loser.ogg");
-	//starter_fx = App->audio->LoadFx("sounds/fx/launcher.ogg");
-
 	return true;
 }
 
@@ -74,7 +71,7 @@ bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
 	App->textures->Unload(ball_tex);
-	//App->textures->Unload(starter_tex);
+	App->textures->Unload(flipper_tex);
 	return true;
 }
 
@@ -122,7 +119,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) 
 	{
 		launcher_joint->SetMotorSpeed(-2);
-		impulse_force += 0.5f;
+		impulse_force += 1.2f;
 
 		if (impulse_force > 60)
 		{
@@ -135,7 +132,20 @@ update_status ModulePlayer::Update()
 		impulse_force = 0; //Sfx
 	}
 
-	//--------Ball------------------------------------------------
+	//--------Launcher----------------------------------------------
+	int x, y;
+	launcher->GetPosition(x, y);
+	SDL_Rect rect = { x ,  y, 33, 33 };
+	App->renderer->DrawQuad(rect, 255, 255, 255);
+
+	// -------Flippers----------------------------------------------
+	flipper_l->GetPosition(x, y);
+	App->renderer->Blit(flipper_tex, x -8, y - 12, &flipper_rect, 1.0f, flipper_l->GetRotation(), 8,14);
+	flipper_r->GetPosition(x, y);
+	App->renderer->Blit(flipper_tex, x - flipper_rect.w +  8, y - 12, &flipper_rect, 1.0f, flipper_r->GetRotation(), flipper_rect.w - 8, flipper_rect.h -14, true);
+	//App->renderer->Blit(flipper_tex, x, y, &rect);
+
+	//--------Ball--------------------------------------------------
 	if (ball != nullptr)
 	{
 		int x, y;
@@ -144,11 +154,7 @@ update_status ModulePlayer::Update()
 		App->renderer->Blit(ball_tex, x, y, &rect);
 	}
 
-	//--------Launcher----------------------------------------------
-	int x, y;
-	launcher->GetPosition(x, y);
-	SDL_Rect rect = { x ,  y, 33, 33 };
-	App->renderer->DrawQuad(rect , 255,255,255);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -161,7 +167,12 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 	// Slingshots ======================================================
 	if (ball == bodyA && App->scene_intro->slingshots.find(bodyB) != -1)
 	{
-		// Add points ================================
+		// Change bonus ==================================
+		App->scene_intro->current_bonus = (Bonuses)((int)App->scene_intro->current_bonus + 1);
+		if (App->scene_intro->current_bonus == Bonuses::max) {
+			App->scene_intro->current_bonus = Bonuses::extra_ball;
+		}
+		// Add points ====================================
 		App->ui->AddPoints(1000);
 		// Sfx ===========================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
@@ -180,8 +191,21 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		// Sfx =======================================
 		App->audio->PlayFx(App->scene_intro->bonus_fx);
 		// Aplly impulse =============================
+		int random = rand() % 3;
 		b2Vec2 normal = worldManifold.normal;
-		normal *= 1.8f;
+		switch (random)
+		{
+		case 0:
+			normal.y *= 0.8f;
+			break;
+		case 1:
+			normal.y *= 1.5f;
+			break;
+		case 2:
+			normal.y *= 1.2f;
+			break;
+		}
+		normal.x *= 1.8f;
 		ball->body->SetLinearVelocity({ 0.0f, 0.0f });
 		ball->body->ApplyLinearImpulse(normal, ball->body->GetWorldCenter(), true);
 	}

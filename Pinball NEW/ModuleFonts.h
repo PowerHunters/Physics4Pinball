@@ -30,14 +30,11 @@ public:
 	// Create a surface from text
 	void BlitText(int x, int y, int bmp_font_id, const char* text) const;
 
-	uint GetCharWidth(int charId) const;
+	uint Get_CharWidth(int charId) const;
 
 private:
 
 	Font fonts[MAX_FONTS];
-	//Variables
-	uint font1W;
-	uint font1H;
 };
 
 

@@ -104,7 +104,8 @@ public:
 	SDL_Rect target_rect;
 	// Sfx ========================================
 	uint chocolate_combo_sfx;
-	 
+	uint targets_fx;
+	uint advance_letter_fx;
 
 	//Delete------------------------
 	uint bonus_fx;

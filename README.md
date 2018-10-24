@@ -1,10 +1,10 @@
-# Version of the game
+﻿# Version of the game
 
 Physics4Pinball v.0.0.1.
 
 ## Description
 
-In this version of the game you will be able to place a ball on the pinball and see how it collides.
+In this version of the game you will be able to fully play pinball.
 
 ## Links
 Lluis Moreu https://github.com/youis11 
@@ -15,30 +15,36 @@ Github repository: https://github.com/PowerHunters/Physics4Pinball
 
 Github organization: https://github.com/PowerHunters
 
-Changelist: https://github.com/PowerHunters/Physics4Pinball/blob/master/CHANGELOG.md
-
 Original pinball: https://play.google.com/store/apps/details?id=net.adesignstudio.pinball&hl=ca
 
 ## Differences w/ the original
 
--
+- Power meter is not implemented.
+
+- Lites top hole.
+
+- Lites multiball.
+
+- Stoppers.
+
+- HighScore implemented.
 
 ## Controls
-LEFT ARROW - Move left flipper
-RIGHT ARROW - Move right flipper
-DOWN ARROW - Activate kicker
 
-Debug mode:
+LEFT ARROW - Move left flipper.
+RIGHT ARROW - Move right flipper.
+DOWN ARROW - Activate kicker.
 
-1 - Place a ball on the mouse position
-2 - Place a ball on the start position
-3 - Place a ball on the top of the pinball
+1 - Place a ball in the start position.
+2 - Reset.
+SPACE - Restart the game.
 
-F1 - Show/hide collision boxes
+F1 - Show/hide collision boxes.
 
 ## Combo
 
--
+- Pressing the four yellow targets activates the last target, when it is pressed. A letter will turn yellow. Turn all the letters in order to make the combo.
+
 ## MIT License
 
 Copyright (c) [2018] [Lluís Moreu & AAurelioGN]

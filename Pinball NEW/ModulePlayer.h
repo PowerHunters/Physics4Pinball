@@ -60,8 +60,8 @@ public:
 	SDL_Rect flipper_rect;
 
 	// Sfx==========================================
-	//uint flipper_fx;
-	//uint lose_fx;
-	//uint starter_fx;
+	uint flipper_fx;
+	uint lose_fx;
+	uint kicker_fx;
 
 };

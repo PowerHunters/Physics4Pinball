@@ -58,6 +58,9 @@ bool ModulePlayer::Start()
 	flipper_r = App->physics->CreateFlipper(b2Vec2(293, 918), right_flipper, 8, b2Vec2(325, 918), -40, 30, flipper_r_joint);
  	launcher = App->physics->CreateLauncher(launcher_init_pos.x, launcher_init_pos.y, 33, 33, launcher_joint);
 
+	flipper_fx = App->audio->LoadFx("sfx/flipper.wav");
+	kicker_fx = App->audio->LoadFx("sfx/kicker.wav");
+	lose_fx = App->audio->LoadFx("sfx/negative_beeps.wav");
 	return true;
 }
 
@@ -118,12 +121,14 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		engageFlipper(flipper_l, -10.0f);
+		App->audio->PlayFx(flipper_fx);
 	}
 
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		engageFlipper(flipper_r, 10.0f);
+		App->audio->PlayFx(flipper_fx);
 	}
 
 	// Launcher ==============================================================
@@ -136,6 +141,7 @@ update_status ModulePlayer::Update()
 		{
 			impulse_force = 60;
 		}
+		App->audio->PlayFx(kicker_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) 
 	{
@@ -230,6 +236,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		if (lifes <= 0) {
 			lifes = 0;
 			is_dead = true;
+			App->audio->PlayFx(lose_fx);
 		}
 		else
 		// Set ball ==================================

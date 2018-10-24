@@ -106,7 +106,8 @@ bool ModuleSceneIntro::Start()
 	// Delete-------------------------------------------
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 	chocolate_combo_sfx = App->audio->LoadFx("sfx/chocolate_combo.wav");
-
+	targets_fx = App->audio->LoadFx("sfx/target.wav");
+	advance_letter_fx = App->audio->LoadFx("sfx/advance_letter.wav");
 	return ret;
 }
 
@@ -385,6 +386,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 		if (combo_letters_amount < 8) 
 		{
 			++combo_letters_amount;
+			App->audio->PlayFx(advance_letter_fx);
 		}
 		else 
 		{
@@ -403,6 +405,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* 
 			targets[i]->to_delete = true;
 			// Add points ================================
 			App->ui->AddPoints(2000);
+			App->audio->PlayFx(targets_fx);
 			break;
 		}
 	}

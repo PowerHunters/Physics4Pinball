@@ -1,6 +1,6 @@
 ﻿# Version of the game
 
-Physics4Pinball v.0.0.1.
+Physics4Pinball v.1.0
 
 ## Description
 
@@ -44,6 +44,28 @@ F1 - Show/hide collision boxes.
 ## Combo
 
 - Pressing the four yellow targets activates the last target, when it is pressed. A letter will turn yellow. Turn all the letters in order to make the combo.
+
+## Instructions to execute
+
+
+
+1.- Download the last ZIP release on https://github.com/PowerHunters/Physics4Pinball/releases
+
+
+2.- Unzip the file
+
+
+
+3.- Execute ChocolatePinball.exe
+
+## Artist references
+
+Background music called Sounds & House by (frankum)[https://freesound.org/people/frankum/] .
+GameOver fx called negatuve_beeps by (themusicalnomad)[https://freesound.org/people/themusicalnomad/] .
+Kicker fx called Low Grind by (Bitbeast)[https://freesound.org/people/Bitbeast/] .
+Flipper fx called stfire_pc1f43_thud by (relwin)[https://freesound.org/people/relwin/] .
+Target fx called Projector Button Push by (GreekIrish)[https://freesound.org/people/GreekIrish/] .
+Advancing letter fx called Advancing level by (ProjectsUO12) [https://freesound.org/people/ProjectsU012/] .
 
 ## MIT License
 

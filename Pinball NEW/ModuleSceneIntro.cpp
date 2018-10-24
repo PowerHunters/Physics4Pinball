@@ -96,6 +96,7 @@ bool ModuleSceneIntro::Start()
 	top_hole->listener = this;
 	magnet_hole = App->physics->CreateCircleIsSensor(438, 280, 8);
 	magnet_hole->listener = this;
+
 	// Barriers ---------------------------------------
 	sensor_barrier_right = App->physics->CreateRectangleSensor(370, 134, 60, 6, 90);
 	sensor_barrier_right->listener = this;
@@ -103,7 +104,9 @@ bool ModuleSceneIntro::Start()
 	sensor_initial_barrier_left->listener = this;
 	sensor_final_barrier_left = App->physics->CreateRectangleSensor(140, 147, 80, 6, 90);
 	sensor_final_barrier_left->listener = this;
-	// Delete-------------------------------------------
+
+	// Music & Fx-------------------------------------------
+	App->audio->PlayMusic("music/house_music.gg");
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 	chocolate_combo_sfx = App->audio->LoadFx("sfx/chocolate_combo.wav");
 	targets_fx = App->audio->LoadFx("sfx/target.wav");

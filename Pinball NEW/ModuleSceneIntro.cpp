@@ -106,7 +106,7 @@ bool ModuleSceneIntro::Start()
 	sensor_final_barrier_left->listener = this;
 
 	// Music & Fx-------------------------------------------
-	App->audio->PlayMusic("music/house_music.gg");
+	App->audio->PlayMusic("music/house_music.ogg");
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 	chocolate_combo_sfx = App->audio->LoadFx("sfx/chocolate_combo.wav");
 	targets_fx = App->audio->LoadFx("sfx/target.wav");

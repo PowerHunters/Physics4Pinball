@@ -34,10 +34,10 @@ Original pinball: https://play.google.com/store/apps/details?id=net.adesignstudi
 LEFT ARROW - Move left flipper.
 RIGHT ARROW - Move right flipper.
 DOWN ARROW - Activate kicker.
-
+SPACE - Restart the game.
+F1 - Show/hide collision boxes.
 1 - Place a ball in the start position.
 2 - Reset.
-SPACE - Restart the game.
 
 F1 - Show/hide collision boxes.
 

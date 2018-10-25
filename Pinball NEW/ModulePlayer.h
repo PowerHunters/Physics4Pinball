@@ -65,5 +65,6 @@ public:
 	uint flipper_fx;
 	uint lose_fx;
 	uint kicker_fx;
+	uint failure_fx;
 
 };

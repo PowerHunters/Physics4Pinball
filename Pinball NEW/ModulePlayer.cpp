@@ -61,6 +61,7 @@ bool ModulePlayer::Start()
 	flipper_fx = App->audio->LoadFx("sfx/flipper.wav");
 	kicker_fx = App->audio->LoadFx("sfx/kicker.wav");
 	lose_fx = App->audio->LoadFx("sfx/negative_beeps.wav");
+	failure_fx = App->audio->LoadFx("sfx/failure.wav");
 	return true;
 }
 
@@ -146,12 +147,12 @@ update_status ModulePlayer::Update()
 		{
 			impulse_force = 60;
 		}
-		App->audio->PlayFx(kicker_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) 
 	{
 		launcher_joint->SetMotorSpeed(impulse_force);
 		impulse_force = 0; //Sfx
+		App->audio->PlayFx(kicker_fx);
 	}
 
 	//--------Launcher----------------------------------------------
@@ -247,7 +248,7 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Contact* cont
 		// Set ball ==================================
 		{
 			// Sfx =======================================
-			App->audio->PlayFx(App->scene_intro->bonus_fx); //lose_fx
+			App->audio->PlayFx(failure_fx); //failure_fx
 			reset_pos = true;
 		}
 	}

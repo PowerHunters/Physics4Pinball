@@ -1,6 +1,6 @@
 ﻿# Version of the game
 
-Physics4Pinball v.1.0
+Physics4Pinball v.1.1
 
 ## Description
 
@@ -62,10 +62,11 @@ F1 - Show/hide collision boxes.
 
 Background music called Sounds & House by (frankum)[https://freesound.org/people/frankum/] .
 GameOver fx called negatuve_beeps by (themusicalnomad)[https://freesound.org/people/themusicalnomad/] .
-Kicker fx called Low Grind by (Bitbeast)[https://freesound.org/people/Bitbeast/] .
+Failure fx called Low Grind by (Bitbeast)[https://freesound.org/people/Bitbeast/] .
+Kicker fx called Pop! by (kwahmah_02)[https://freesound.org/people/kwahmah_02/] .
 Flipper fx called stfire_pc1f43_thud by (relwin)[https://freesound.org/people/relwin/] .
 Target fx called Projector Button Push by (GreekIrish)[https://freesound.org/people/GreekIrish/] .
-Advancing letter fx called Advancing level by (ProjectsUO12) [https://freesound.org/people/ProjectsU012/] .
+Advancing letter fx called Matchete_15 by (Jagadamba) [https://freesound.org/people/Jagadamba/] .
 
 ## MIT License
 

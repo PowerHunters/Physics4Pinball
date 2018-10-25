@@ -268,6 +268,7 @@ PhysBody* ModulePhysics::CreateFlipper(b2Vec2 position, int * points, int size, 
 	joint_def.upperAngle = upper_angle * DEGTORAD;
 	joint_def.localAnchorA.Set(0, 0);
 	joint_def.localAnchorB.Set(0, 0);
+	joint_def.maxMotorTorque = 0.0f;
 	joint_def.collideConnected = false;
 	joint_def.enableLimit = true;
 

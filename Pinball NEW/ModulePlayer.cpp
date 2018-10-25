@@ -120,15 +120,20 @@ update_status ModulePlayer::Update()
 	// Flippers =============================================================
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_l, -10.0f);
 		App->audio->PlayFx(flipper_fx);
 	}
-
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		engageFlipper(flipper_l, -8.0f);
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		engageFlipper(flipper_r, 10.0f);
 		App->audio->PlayFx(flipper_fx);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		engageFlipper(flipper_r, 8.0f);
 	}
 
 	// Launcher ==============================================================

@@ -36,6 +36,8 @@ public:
 	int lifes;
 	uint points;
 	uint multiplier;
+	bool impulse_left = false;
+	bool impulse_right = false;
 
 	// PhysBodies ==================================
 	PhysBody* ball = NULL;

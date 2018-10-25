@@ -110,7 +110,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("sfx/bonus.wav");
 	chocolate_combo_sfx = App->audio->LoadFx("sfx/chocolate_combo.wav");
 	targets_fx = App->audio->LoadFx("sfx/target.wav");
-	advance_letter_fx = App->audio->LoadFx("sfx/advance_letter.wav");
+	advance_letter_fx = App->audio->LoadFx("sfx/advancing_letter.wav");
 	return ret;
 }
 
